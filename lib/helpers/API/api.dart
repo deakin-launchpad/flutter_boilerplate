@@ -1,12 +1,6 @@
-import 'package:flutter/foundation.dart';
+import '../../models/models.dart';
 import 'package:dio/dio.dart';
 import './dioInstance.dart';
-
-class DIOResponseBody {
-  final bool success;
-  final dynamic data;
-  DIOResponseBody({this.data, @required this.success});
-}
 
 class API {
   final Dio _dioinstance = DioInstance().construct;
@@ -42,7 +36,9 @@ class API {
   }
 
   Future<bool> registerUser(userDetails) async {
-    return _dioinstance.post('user/register', data: userDetails).then((respone) {
+    return _dioinstance
+        .post('user/register', data: userDetails)
+        .then((respone) {
       return true;
     }).catchError((error) {
       print(error.response);
