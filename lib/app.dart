@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import './providers/providers.dart';
 import './configurations/configurations.dart';
-import './routes/index.dart';
+import './routes/routes.dart';
 import './theme/theme.dart';
 
 import './screens/home.dart';
