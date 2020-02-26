@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
-
-class SidebarItem {
-  final String title;
-  final IconData icon;
-  final Function fun;
-  SidebarItem({@required this.title, @required this.icon, @required this.fun});
-}
-
-class _LayoutConfig {
-  final Color primaryColor, secondaryColor;
-  _LayoutConfig({@required this.primaryColor, @required this.secondaryColor});
-}
+import '../models/models.dart';
 
 class Configurations {
   final String _appTitle = "useronboarding";
   final String _backendUrl = "http://localhost:8041";
   final bool _bypassbackend = true;
+  final String _devUserName = "developer@dev.dev";
+  final String _devUserpassword = "secretpassword";
   var layoutConfig =
-      _LayoutConfig(primaryColor: Colors.indigo, secondaryColor: Colors.yellow);
+      LayoutConfig(primaryColor: Colors.indigo, secondaryColor: Colors.yellow);
 
   final List<SidebarItem> sideBarItems = [];
   String get backendUrl {
@@ -30,5 +21,9 @@ class Configurations {
 
   bool get bypassBackend {
     return _bypassbackend;
+  }
+
+  UserLoginDetails getDevDetails() {
+    return UserLoginDetails(password: _devUserpassword, username: _devUserName);
   }
 }

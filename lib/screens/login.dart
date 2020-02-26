@@ -4,12 +4,7 @@ import '../configurations/configurations.dart';
 
 import '../helpers/API/api.dart';
 import '../providers/userDataProvider.dart';
-
-class UserLoginDetails {
-  String username;
-  String password;
-  UserLoginDetails({this.username, this.password});
-}
+import '../models/models.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -17,20 +12,36 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  bool _devModeSwitchValue = false;
   final _loginFormKey = GlobalKey<FormState>();
   final _passwordFocusNode = FocusNode();
   final _usernameFocusNode = FocusNode();
   final UserLoginDetails loginValues = UserLoginDetails();
+
+  void changeDevModeValue(bool value) {
+    setState(() {
+      _devModeSwitchValue = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     void performLogin(Function assignToken) async {
       if (_loginFormKey.currentState.validate()) {
         _loginFormKey.currentState.save();
-        var loginCheck = await API().userLogin({
-          'emailId': loginValues.username,
-          'password': loginValues.password
-        });
+        DIOResponseBody loginCheck;
+        if (_devModeSwitchValue) {
+          UserLoginDetails devDetails = Configurations().getDevDetails();
+          loginCheck = await API().userLogin({
+            'emailId': devDetails.username,
+            'password': devDetails.password
+          });
+        } else {
+          loginCheck = await API().userLogin({
+            'emailId': loginValues.username,
+            'password': loginValues.password
+          });
+        }
         if (loginCheck.success) {
           assignToken(loginCheck.data);
           Navigator.of(context).pushReplacementNamed('/home');
@@ -48,6 +59,19 @@ class _LoginFormState extends State<LoginForm> {
         padding: EdgeInsets.all(20),
         shrinkWrap: true,
         children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Text('DevMode'),
+                  Switch(
+                    value: _devModeSwitchValue,
+                    onChanged: (newValue) {
+                      changeDevModeValue(newValue);
+                    },
+                  ),
+                ],
+              )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
