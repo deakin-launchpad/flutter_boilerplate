@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/userDataProvider.dart';
+import '../providers/providers.dart';
 import '../widgets/helpers/AdaptiveScaffold.dart';
 
 class Home extends StatelessWidget {
