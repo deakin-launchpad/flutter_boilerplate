@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../configurations/configurations.dart';
-import '../helpers/API/api.dart';
+import '../helpers/helpers.dart';
 import '../providers/providers.dart';
 import '../models/models.dart';
 
@@ -88,13 +88,9 @@ class _LoginFormState extends State<LoginForm> {
                 loginValues.username = value;
               },
               validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please Enter the Email';
-                }
-                Pattern emailPattern =
-                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                RegExp regex = new RegExp(emailPattern);
-                if (!regex.hasMatch(value)) return 'Enter Valid Email';
+                if (value.isEmpty) return 'Please Enter the Email';
+                if (!TextHelper().validateEmail(value))
+                  return 'Enter Valid Email';
                 return null;
               },
             ),
