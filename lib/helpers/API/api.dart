@@ -1,16 +1,32 @@
-import '../../models/models.dart';
 import 'package:dio/dio.dart';
+
+import '../../models/models.dart';
 import './dioInstance.dart';
 
 class API {
-  final Dio _dioinstance = DioInstance().construct;
+  static final API api = API._privateConstructor();
+  final Dio _dioinstance = DioInstance().instance;
+
+  API._privateConstructor() {
+    print("All APIs initialized.");
+  }
+
+  factory API() {
+    return api;
+  }
 
   DIOResponseBody errorHelper(error) {
-    if (error.response.isEmpty) {
+    if (error == null)
+      return DIOResponseBody(success: false, data: 'Network Error');
+    if (error.response == null)
       return DIOResponseBody(success: false, data: "Network Error");
-    }
-    return DIOResponseBody(
-        success: false, data: error.response.data['message']);
+    if (error.response == null)
+      return DIOResponseBody(
+          success: false, data: 'Connection to Backend Failed');
+    if (error.response.data["message"] != null)
+      return DIOResponseBody(
+          success: false, data: error.response.data["message"]);
+    return DIOResponseBody(success: false, data: "Oops! Something went wrong!");
   }
 
   Future<DIOResponseBody> userLogin(details) async {

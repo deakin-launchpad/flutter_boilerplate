@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 
 class Configurations {
+  static final bool devBuild = true;
+
+  final bool _bypassbackend = true;
+
   final String _appTitle = "useronboarding";
   final String _backendUrl = "http://localhost:8041";
-  final bool _bypassbackend = true;
-  final String _devUserName = "developer@dev.dev";
-  final String _devUserpassword = "secretpassword";
-  var layoutConfig =
+
+  final UserLoginDetails _devDetails = new UserLoginDetails(
+    username: "developer@dev.dev",
+    password: "secretpassword",
+  );
+
+  LayoutConfig layoutConfig =
       LayoutConfig(primaryColor: Colors.indigo, secondaryColor: Colors.yellow);
 
   final List<SidebarItem> sideBarItems = [];
@@ -24,6 +31,6 @@ class Configurations {
   }
 
   UserLoginDetails getDevDetails() {
-    return UserLoginDetails(password: _devUserpassword, username: _devUserName);
+    return _devDetails;
   }
 }

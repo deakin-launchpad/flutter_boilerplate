@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
                 Flexible(
                     child: Text(
                   'accessToken: ' + data.accessToken,
-                  style: Theme.of(context).textTheme.body1,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ))
               ],
             ),
