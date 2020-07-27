@@ -3,34 +3,40 @@ import '../models/models.dart';
 
 class Configurations {
   static final bool devBuild = true;
+  static final bool debugBanner = false;
 
   final bool _bypassbackend = true;
 
   final String _appTitle = "useronboarding";
+  final String _appVersion = "0.0.1";
+  final String _appCopyRight = "Sanchit Dang 2020";
+
   final String _backendUrl = "http://localhost:8041";
 
   final UserLoginDetails _devDetails = new UserLoginDetails(
     username: "developer@dev.dev",
     password: "secretpassword",
   );
+  final String _devAccessToken = "";
 
-  LayoutConfig layoutConfig =
+  LayoutConfig _layoutConfig =
       LayoutConfig(primaryColor: Colors.indigo, secondaryColor: Colors.yellow);
 
   final List<SidebarItem> sideBarItems = [];
-  String get backendUrl {
-    return _backendUrl;
-  }
 
-  String get appTitle {
-    return _appTitle;
-  }
+  LayoutConfig get layoutConfig => _layoutConfig;
 
-  bool get bypassBackend {
-    return _bypassbackend;
-  }
+  String get backendUrl => _backendUrl;
 
-  UserLoginDetails getDevDetails() {
-    return _devDetails;
-  }
+  String get appTitle => _appTitle;
+
+  bool get bypassBackend => _bypassbackend;
+
+  String get appVersion => _appVersion;
+
+  String get appCP => _appCopyRight;
+
+  UserLoginDetails get getDevDetails => _devDetails;
+
+  String get devAccessToken => _devAccessToken;
 }

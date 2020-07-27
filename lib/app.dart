@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './providers/providers.dart';
-import './configurations/configurations.dart';
+import 'configurations/configurations.dart';
 import './routes/routes.dart';
 import './theme/theme.dart';
 
@@ -20,6 +20,7 @@ class Application extends StatelessWidget {
       ],
       child: Consumer<UserDataProvider>(
         builder: (_, data, __) => MaterialApp(
+          debugShowCheckedModeBanner: Configurations.debugBanner,
           home: data.loginStatus
               ? Home()
               : FutureBuilder(
@@ -32,7 +33,7 @@ class Application extends StatelessWidget {
                           : Login(),
                 ),
           title: Configurations().appTitle,
-          theme: applicationTheme,
+          theme: ApplicationTheme().getAppTheme,
           routes: Routes().base,
         ),
       ),

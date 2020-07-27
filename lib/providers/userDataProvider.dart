@@ -27,9 +27,7 @@ class UserDataProvider with ChangeNotifier {
     return _accessToken;
   }
 
-  bool get loginStatus {
-    return _userLoggedIn;
-  }
+  bool get loginStatus => _userLoggedIn;
 
   void assignAccessToken(String token) async {
     if (token != "") {

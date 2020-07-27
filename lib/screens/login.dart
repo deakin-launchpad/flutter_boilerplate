@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../configurations/configurations.dart';
-
 import '../helpers/API/api.dart';
 import '../providers/providers.dart';
 import '../models/models.dart';
@@ -17,6 +16,7 @@ class _LoginFormState extends State<LoginForm> {
   final _passwordFocusNode = FocusNode();
   final _usernameFocusNode = FocusNode();
   final UserLoginDetails loginValues = UserLoginDetails();
+  final Configurations _config = new Configurations();
 
   void changeDevModeValue(bool value) {
     setState(() {
@@ -31,16 +31,9 @@ class _LoginFormState extends State<LoginForm> {
         _loginFormKey.currentState.save();
         DIOResponseBody loginCheck;
         if (_devModeSwitchValue) {
-          UserLoginDetails devDetails = Configurations().getDevDetails();
-          loginCheck = await API().userLogin({
-            'emailId': devDetails.username,
-            'password': devDetails.password
-          });
+          loginCheck = await API().userLogin(_config.getDevDetails);
         } else {
-          loginCheck = await API().userLogin({
-            'emailId': loginValues.username,
-            'password': loginValues.password
-          });
+          loginCheck = await API().userLogin(loginValues);
         }
         if (loginCheck.success) {
           assignToken(loginCheck.data);
@@ -59,19 +52,20 @@ class _LoginFormState extends State<LoginForm> {
         padding: EdgeInsets.all(20),
         shrinkWrap: true,
         children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Text('DevMode'),
-                  Switch(
-                    value: _devModeSwitchValue,
-                    onChanged: (newValue) {
-                      changeDevModeValue(newValue);
-                    },
-                  ),
-                ],
-              )),
+          if (Configurations.devBuild)
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: <Widget>[
+                    Text('DevMode'),
+                    Switch(
+                      value: _devModeSwitchValue,
+                      onChanged: (newValue) {
+                        changeDevModeValue(newValue);
+                      },
+                    ),
+                  ],
+                )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
@@ -134,8 +128,8 @@ class _LoginFormState extends State<LoginForm> {
           Consumer<UserDataProvider>(
               builder: (_, data, __) => RaisedButton(
                     onPressed: () {
-                      if (Configurations().bypassBackend) {
-                        data.assignAccessToken("dummyToken");
+                      if (_config.bypassBackend) {
+                        data.assignAccessToken(_config.devAccessToken);
                         Navigator.of(context).pushReplacementNamed('/home');
                         return;
                       }

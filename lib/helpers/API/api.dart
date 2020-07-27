@@ -29,8 +29,10 @@ class API {
     return DIOResponseBody(success: false, data: "Oops! Something went wrong!");
   }
 
-  Future<DIOResponseBody> userLogin(details) async {
-    return _dioinstance.post('user/login', data: details).then((respone) {
+  Future<DIOResponseBody> userLogin(UserLoginDetails details) async {
+    return _dioinstance
+        .post('user/login', data: details.toLoginApiJSON)
+        .then((respone) {
       return DIOResponseBody(
           success: true, data: respone.data['data']['accessToken']);
     }).catchError((error) {
