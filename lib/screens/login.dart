@@ -1,22 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../widgets/widgets.dart';
 import '../configurations/configurations.dart';
 import '../helpers/helpers.dart';
 import '../providers/providers.dart';
 import '../models/models.dart';
 
 class LoginForm extends StatefulWidget {
+  GlobalKey<FormState> formKey;
+  double height;
+  LoginForm({
+    @required this.formKey,
+    @required this.height,
+  });
   @override
   _LoginFormState createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
   bool _devModeSwitchValue = false;
-  final _loginFormKey = GlobalKey<FormState>();
   final _passwordFocusNode = FocusNode();
   final _usernameFocusNode = FocusNode();
   final UserLoginDetails loginValues = UserLoginDetails();
   final Configurations _config = new Configurations();
+
+  Widget _textField(
+    String title, {
+    bool isPassword = false,
+    String hintText,
+    String Function(String) validator,
+    TextInputAction textInputAction,
+    void Function(String) onFieldSubmitted,
+    FocusNode focusNode,
+    TextInputType keyboardType,
+    void Function(String) onSaved,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            onSaved: onSaved,
+            keyboardType: keyboardType,
+            focusNode: focusNode,
+            onFieldSubmitted: onFieldSubmitted,
+            validator: validator,
+            obscureText: isPassword,
+            textInputAction: textInputAction,
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _loginButton(Function onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: new Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+        child: Text(
+          'Login',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
+  }
 
   void changeDevModeValue(bool value) {
     setState(() {
@@ -24,11 +102,188 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
+  Widget _emailPasswordWidget() {
+    return Column(
+      children: <Widget>[
+        _textField(
+          "Email id",
+          focusNode: _usernameFocusNode,
+          textInputAction: TextInputAction.next,
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(_passwordFocusNode);
+          },
+          hintText: 'JohnDoe@example.com',
+          keyboardType: TextInputType.emailAddress,
+          onSaved: (value) {
+            loginValues.username = value;
+          },
+          validator: (value) {
+            if (value.isEmpty) return 'Please Enter the Email';
+            if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
+            return null;
+          },
+        ),
+        _textField(
+          "Password",
+          isPassword: true,
+          focusNode: _passwordFocusNode,
+          textInputAction: TextInputAction.done,
+          keyboardType: TextInputType.emailAddress,
+          onSaved: (value) {
+            loginValues.username = value;
+          },
+          validator: (value) {
+            if (value.isEmpty) return 'Please Enter the Email';
+            if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
+            return null;
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _title() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+          text: 'flutter',
+          style: GoogleFonts.portLligatSans(
+            textStyle: Theme.of(context).textTheme.headline1,
+            fontSize: 30,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
+          ),
+          children: [
+            TextSpan(
+              text: 'base',
+              style: TextStyle(color: Colors.black54, fontSize: 30),
+            ),
+            TextSpan(
+              text: 'plate',
+              style: TextStyle(color: Colors.black, fontSize: 30),
+            ),
+          ]),
+    );
+  }
+
+  Widget _divider() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+          ),
+          Text('or'),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Divider(
+                thickness: 1,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _createAccountLabel() {
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '  /signup');
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Don\'t have an account ?',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Signup',
+              style: TextStyle(
+                  color: Color(0xfff79c4f),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _facebookButton() {
+    return Container(
+      height: 50,
+      margin: EdgeInsets.symmetric(vertical: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xff1959a9),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    topLeft: Radius.circular(5)),
+              ),
+              alignment: Alignment.center,
+              child: Text('f',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400)),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xff2872ba),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(5),
+                    topRight: Radius.circular(5)),
+              ),
+              alignment: Alignment.center,
+              child: Text('Log in with Facebook',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     void performLogin(Function assignToken) async {
-      if (_loginFormKey.currentState.validate()) {
-        _loginFormKey.currentState.save();
+      if (widget.formKey.currentState.validate()) {
+        widget.formKey.currentState.save();
         DIOResponseBody loginCheck;
         if (_devModeSwitchValue) {
           loginCheck = await API().userLogin(_config.getDevDetails);
@@ -46,150 +301,89 @@ class _LoginFormState extends State<LoginForm> {
       }
     }
 
-    return Form(
-      key: _loginFormKey,
-      child: ListView(
-        padding: EdgeInsets.all(20),
-        shrinkWrap: true,
-        children: <Widget>[
-          if (Configurations.devBuild)
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: <Widget>[
-                    Text('DevMode'),
-                    Switch(
-                      value: _devModeSwitchValue,
-                      onChanged: (newValue) {
-                        changeDevModeValue(newValue);
-                      },
-                    ),
-                  ],
-                )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              focusNode: _usernameFocusNode,
-              textInputAction: TextInputAction.next,
-              onFieldSubmitted: (_) {
-                FocusScope.of(context).requestFocus(_passwordFocusNode);
-              },
-              decoration: InputDecoration(
-                labelText: 'Email',
-                hintText: 'JohnDoe@example.com',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              onSaved: (value) {
-                loginValues.username = value;
-              },
-              validator: (value) {
-                if (value.isEmpty) return 'Please Enter the Email';
-                if (!TextHelper().validateEmail(value))
-                  return 'Enter Valid Email';
-                return null;
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              focusNode: _passwordFocusNode,
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                hintText: 'mysecretpassword',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
-              obscureText: true,
-              onSaved: (value) {
-                loginValues.password = value;
-              },
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please Enter the password';
-                }
-                return null;
-              },
-            ),
-          ),
-          Consumer<UserDataProvider>(
-              builder: (_, data, __) => RaisedButton(
-                    onPressed: () {
-                      if (_config.bypassBackend) {
-                        data.assignAccessToken(_config.devAccessToken);
-                        Navigator.of(context).pushReplacementNamed('/home');
-                        return;
-                      }
-                      performLogin(data.assignAccessToken);
-                    },
-                    child: Text('Login'),
-                    color: Theme.of(context).accentColor,
-                  )),
-          RaisedButton(
-            child: Text('Sign Up'),
-            onPressed: () {
-              Navigator.pushNamed(context, '/signup');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(height: widget.height * .2),
+        _title(),
+        SizedBox(height: 50),
+        _emailPasswordWidget(),
+        SizedBox(height: 20),
+        Consumer<UserDataProvider>(
+          builder: (_, data, __) => _loginButton(
+            () {
+              if (_config.bypassBackend) {
+                data.assignAccessToken(_config.devAccessToken);
+                Navigator.of(context).pushReplacementNamed('/home');
+                return;
+              }
+              performLogin(data.assignAccessToken);
             },
-          )
-        ],
-      ),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.centerRight,
+          child: Text('Forgot Password ?',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        ),
+        _divider(),
+        _facebookButton(),
+        SizedBox(height: widget.height * .055),
+        _createAccountLabel(),
+      ],
     );
   }
 }
 
 class Login extends StatelessWidget {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-              Colors.purple,
-              Colors.red,
-              Colors.orange,
-            ])),
-        child: SafeArea(
-          bottom: true,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Flutter User Onboarding',
-                  style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'pricedown',
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                            color: Colors.black,
-                            offset: Offset(2, 2),
-                            blurRadius: 15)
-                      ]),
-                  textAlign: TextAlign.center,
-                ),
+    final double height = MediaQuery.of(context).size.height;
+    Widget _backButton() {
+      return InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
+                child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
               ),
-              Card(
-                margin: EdgeInsets.only(left: 50, right: 50, top: 20),
-                color: Colors.white,
-                elevation: 50,
-                child: LoginForm(),
-              )
+              Text('Back',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
             ],
           ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: Container(
+        height: height,
+        child: Stack(
+          children: [
+            Positioned(
+              top: -height * .15,
+              right: -MediaQuery.of(context).size.width * .4,
+              child: BezierContainer(),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: SingleChildScrollView(
+                child: LoginForm(
+                  formKey: _formKey,
+                  height: height,
+                ),
+              ),
+            ),
+            Positioned(top: 60, left: 10, child: _backButton()),
+          ],
         ),
       ),
     );

@@ -1,13 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../models/layout.dart';
 import '../configurations/configurations.dart';
 
 class ApplicationTheme {
   ThemeData _theme;
 
-  ApplicationTheme() {
+  ApplicationTheme(BuildContext context) {
+    final TextTheme _textTheme = Theme.of(context).textTheme;
     final LayoutConfig _layoutConfig = Configurations().layoutConfig;
     _theme = ThemeData.light().copyWith(
       primaryColor: _layoutConfig.primaryColor,
@@ -21,13 +22,8 @@ class ApplicationTheme {
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
-        textTheme: new TextTheme(
-          headline6: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            fontStyle: FontStyle.normal,
-          ),
+        textTheme: GoogleFonts.latoTextTheme(_textTheme).copyWith(
+          bodyText1: GoogleFonts.montserrat(textStyle: _textTheme.bodyText1),
         ),
       ),
       primaryTextTheme: TextTheme(

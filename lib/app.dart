@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './screens/screens.dart';
 
 import './providers/providers.dart';
 import 'configurations/configurations.dart';
 import './routes/routes.dart';
 import './theme/theme.dart';
-
-import './screens/home.dart';
-import './screens/login.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -30,10 +28,10 @@ class Application extends StatelessWidget {
                           ? Scaffold(
                               body: Text('Loading..'),
                             )
-                          : Login(),
+                          : WelcomePage(),
                 ),
           title: Configurations().appTitle,
-          theme: ApplicationTheme().getAppTheme,
+          theme: ApplicationTheme(context).getAppTheme,
           routes: Routes().base,
         ),
       ),
