@@ -8,8 +8,8 @@ import '../providers/providers.dart';
 import '../models/models.dart';
 
 class LoginForm extends StatefulWidget {
-  GlobalKey<FormState> formKey;
-  double height;
+  final GlobalKey<FormState> formKey;
+  final double height;
   LoginForm({
     @required this.formKey,
     @required this.height,
