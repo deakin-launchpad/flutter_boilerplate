@@ -3,13 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/API/api.dart';
 
 class UserDataProvider with ChangeNotifier {
-  String _accessToken;
+  String? _accessToken;
   bool _userLoggedIn = false;
 
   Future<bool> accessTokenLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return false;
-    var localToken = prefs.getString('accessToken');
+    var localToken = prefs.getString('accessToken')!;
     bool status = await API().accessTokenLogin(localToken);
     if (status) {
       _userLoggedIn = true;
@@ -22,7 +22,7 @@ class UserDataProvider with ChangeNotifier {
     }
   }
 
-  String get accessToken {
+  String? get accessToken {
     if (_accessToken == null) return "";
     return _accessToken;
   }

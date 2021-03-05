@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
             GestureDetector(
                 onTap: () {},
                 child: Consumer<UserDataProvider>(
-                    builder: (_, data, __) => FlatButton(
+                    builder: (_, data, __) => TextButton(
                           child: Text(
                             'Logout',
                             style: TextStyle(color: Colors.white),
@@ -33,7 +33,9 @@ class Home extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                       child: Text(
-                    'accessToken: ' + data.accessToken,
+                    data.accessToken != null
+                        ? 'accessToken: ${data.accessToken}'
+                        : 'Empty',
                     style: Theme.of(context).textTheme.bodyText1,
                   ))
                 ],

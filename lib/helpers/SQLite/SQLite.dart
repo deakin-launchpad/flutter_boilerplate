@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+
 import 'package:sqflite/sqflite.dart';
 export 'package:sqflite/sqflite.dart';
 
 import '../../configurations/configurations.dart';
 
-import '../../helpers/SQLite/DBcreation.dart';
+import './DBCreation.dart';
 
 import 'package:path/path.dart' as path;
 
@@ -13,17 +14,17 @@ class SQLiteHelper {
 
   static final String _databaseName = Configurations().appTitle + ".db";
   static final int _databaseVersion = 1;
-  static Database _database;
+  static Database? _database;
 
   factory SQLiteHelper() {
     return _singleton;
   }
 
   _initDatabase() async {
-    final dbPath = await getDatabasesPath();
+    final dbPath = await (getDatabasesPath() as FutureOr<String>);
     return openDatabase(path.join(dbPath, _databaseName),
         version: _databaseVersion, onCreate: (Database db, int version) {
-      DBDefinition.onCreate(db, version);
+      DBCreation.onCreate(db, version);
     });
   }
 
@@ -31,7 +32,7 @@ class SQLiteHelper {
     _initDatabase();
   }
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) return _database;
     // lazily instantiate the db the first time it is accessed
     _database = await _initDatabase();
@@ -39,46 +40,46 @@ class SQLiteHelper {
   }
 
   static Future<void> execute(String query) async {
-    final db = await _singleton.database;
+    final db = await (_singleton.database as FutureOr<Database>);
     await db.transaction((action) async => await action.execute(query));
   }
 
   static Future<void> insert(String table, Map<String, dynamic> data) async {
-    final db = await _singleton.database;
+    final db = await (_singleton.database as FutureOr<Database>);
     db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<List<Map<String, dynamic>>> getData(String tableName) async {
-    final db = await _singleton.database;
+    final db = await (_singleton.database as FutureOr<Database>);
     return db.query(tableName);
   }
 
   static Future<int> rawInsert(String query, List<dynamic> data) async {
-    final db = await _singleton.database;
+    final db = await (_singleton.database as FutureOr<Database>);
     return await db.rawInsert(query, data);
   }
 
   static Future<List> rawSelectAll(String table) async {
-    final db = await _singleton.database;
+    final db = await (_singleton.database as FutureOr<Database>);
     return db.rawQuery('SELECT * FROM $table');
   }
 
   static Future<int> delete(
-      {@required int id, String table, String whereCondition}) async {
-    Database db = await _singleton.database;
+      {required int id, String? table, String? whereCondition}) async {
+    Database? db = await _singleton.database;
     if (null != whereCondition)
-      return await db.delete(table, where: whereCondition, whereArgs: [id]);
+      return await db!.delete(table!, where: whereCondition, whereArgs: [id]);
     else
-      return await db.delete(table, whereArgs: [id]);
+      return await db!.delete(table!, whereArgs: [id]);
   }
 
-  static Future<int> queryRowCount(String table) async {
-    Database db = await _singleton.database;
+  static Future<int?> queryRowCount(String table) async {
+    Database db = await (_singleton.database as FutureOr<Database>);
     return Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
   static Future close() async => _singleton.database.then((database) {
-        database.close();
+        database!.close();
       });
 }

@@ -11,8 +11,8 @@ class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final double height;
   LoginForm({
-    @required this.formKey,
-    @required this.height,
+    required this.formKey,
+    required this.height,
   });
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -28,13 +28,13 @@ class _LoginFormState extends State<LoginForm> {
   Widget _textField(
     String title, {
     bool isPassword = false,
-    String hintText,
-    String Function(String) validator,
-    TextInputAction textInputAction,
-    void Function(String) onFieldSubmitted,
-    FocusNode focusNode,
-    TextInputType keyboardType,
-    void Function(String) onSaved,
+    String? hintText,
+    String? Function(String?)? validator,
+    TextInputAction? textInputAction,
+    void Function(String)? onFieldSubmitted,
+    FocusNode? focusNode,
+    TextInputType? keyboardType,
+    void Function(String?)? onSaved,
   }) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -70,7 +70,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _loginButton(Function onPressed) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: onPressed as void Function()?,
       child: new Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),
@@ -118,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
             loginValues.username = value;
           },
           validator: (value) {
-            if (value.isEmpty) return 'Please Enter the Email';
+            if (value!.isEmpty) return 'Please Enter the Email';
             if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
             return null;
           },
@@ -133,7 +133,7 @@ class _LoginFormState extends State<LoginForm> {
             loginValues.username = value;
           },
           validator: (value) {
-            if (value.isEmpty) return 'Please Enter the Email';
+            if (value!.isEmpty) return 'Please Enter the Email';
             if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
             return null;
           },
@@ -282,8 +282,8 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     void performLogin(Function assignToken) async {
-      if (widget.formKey.currentState.validate()) {
-        widget.formKey.currentState.save();
+      if (widget.formKey.currentState!.validate()) {
+        widget.formKey.currentState!.save();
         DIOResponseBody loginCheck;
         if (_devModeSwitchValue) {
           loginCheck = await API().userLogin(_config.getDevDetails);
@@ -292,11 +292,13 @@ class _LoginFormState extends State<LoginForm> {
         }
         if (loginCheck.success) {
           assignToken(loginCheck.data);
-          Navigator.of(context).pushReplacementNamed('/home');
+          Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(loginCheck.data),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            new SnackBar(
+              content: Text(loginCheck.data),
+            ),
+          );
         }
       }
     }

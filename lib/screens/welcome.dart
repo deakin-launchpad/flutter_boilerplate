@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class WelcomePage extends StatefulWidget {
   static String route = '/welcome';
-  WelcomePage({Key key, this.title}) : super(key: key);
+  WelcomePage({Key? key, this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   _WelcomePageState createState() => _WelcomePageState();

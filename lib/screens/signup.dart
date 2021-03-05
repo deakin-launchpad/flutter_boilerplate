@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../helpers/API/api.dart';
 
 class SignupTextFeild extends StatelessWidget {
-  final String label, hint;
-  final TextInputType type;
-  final TextInputAction action;
-  final Function validator, onSaved, onSubmit;
-  final FocusNode focusNode;
-  final bool isPassword;
+  final String? label, hint;
+  final TextInputType? type;
+  final TextInputAction? action;
+  final Function? validator, onSaved, onSubmit;
+  final FocusNode? focusNode;
+  final bool? isPassword;
   SignupTextFeild({
     this.hint,
     this.label,
@@ -26,8 +26,8 @@ class SignupTextFeild extends StatelessWidget {
       child: TextFormField(
         focusNode: focusNode,
         textInputAction: action,
-        onFieldSubmitted: onSubmit,
-        obscureText: isPassword == null ? false : isPassword,
+        onFieldSubmitted: onSubmit as void Function(String)?,
+        obscureText: isPassword == null ? false : isPassword!,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
@@ -38,15 +38,15 @@ class SignupTextFeild extends StatelessWidget {
           ),
         ),
         keyboardType: type,
-        onSaved: onSaved,
-        validator: validator,
+        onSaved: onSaved as void Function(String?)?,
+        validator: validator as String? Function(String?)?,
       ),
     );
   }
 }
 
 class SignUpValues {
-  String firstname, lastname, email, password, number;
+  String? firstname, lastname, email, password, number;
 
   SignUpValues(
       {this.email, this.firstname, this.lastname, this.password, this.number});
@@ -128,7 +128,7 @@ class _SignUpFormState extends State<SignUpForm> {
               }
               Pattern emailPattern =
                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-              RegExp regex = new RegExp(emailPattern);
+              RegExp regex = new RegExp(emailPattern as String);
               if (!regex.hasMatch(value)) return 'Enter Valid Email';
               return null;
             },
@@ -191,7 +191,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             child: Text('SignUp'),
             onPressed: () async {
               print(signUpValues.number);
@@ -203,17 +203,20 @@ class _SignUpFormState extends State<SignUpForm> {
                 "countryCode": "+61",
                 "password": signUpValues.password
               });
-              if (response)
-                return Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('User Registered'),
-                ));
-              else
-                return Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text('Registration Error!'),
-                ));
+              if (response) {
+                ScaffoldMessenger(
+                  child: Text('User Registered'),
+                );
+                return;
+              } else {
+                ScaffoldMessenger(
+                  child: new Text('Registration Error!'),
+                );
+                return;
+              }
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             child: Text('Back'),
             onPressed: () {
               Navigator.pop(context);

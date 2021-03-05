@@ -5,7 +5,7 @@ import '../models/layout.dart';
 import '../configurations/configurations.dart';
 
 class ApplicationTheme {
-  ThemeData _theme;
+  ThemeData? _theme;
 
   ApplicationTheme(BuildContext context) {
     final TextTheme _textTheme = Theme.of(context).textTheme;
@@ -27,12 +27,12 @@ class ApplicationTheme {
         ),
       ),
       primaryTextTheme: TextTheme(
-        headline6: ThemeData.light().primaryTextTheme.headline6.copyWith(
+        headline6: ThemeData.light().primaryTextTheme.headline6!.copyWith(
               color: Colors.black,
             ),
       ),
     );
   }
 
-  ThemeData get getAppTheme => _theme;
+  ThemeData? get getAppTheme => _theme;
 }

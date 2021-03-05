@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../configurations/configurations.dart';
 
 class SideBar extends StatelessWidget {
-  Widget buildSidebarMenu(String title, IconData icon, Function fun) {
-    return ListTile(leading: Icon(icon), title: Text(title), onTap: fun);
+  Widget buildSidebarMenu(String title, IconData? icon, Function? fun) {
+    return ListTile(leading: Icon(icon), title: Text(title), onTap: fun as void Function()?);
   }
 
   final List sidebarItems = Configurations().sideBarItems.length > 0
