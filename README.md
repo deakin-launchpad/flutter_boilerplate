@@ -1,30 +1,49 @@
-## Flutter User Onboarding
+# Flutter 2 Boilerplate
 
-This project is a starting point for a Flutter application with basic user onboarding.
+A boilerplate project created in flutter. Boilerplate supports both web and mobile. VSCode is recommended in this project.
+
+Current Flutter Version : 2.0.2 
 
 ## Getting Started
 
-- To install flutter follow the guide: https://flutter.dev/docs/get-started/install
+The Boilerplate contains the minimal implementation required to create a new library or project. The repository code is preloaded with some basic components like basic app architecture, app theme, constants and required dependencies to create a new project. By using boiler plate code as standard initializer, we can have same patterns in all the projects that will inherit it. This will also help in reducing setup & development time by allowing you to use same code pattern and avoid re-writing from scratch.
 
-- Do a flutter spec check using commnand
+## Setting up the environment
 
-    `flutter doctor`
+Use this [guide](https://flutter.dev/docs/get-started/install) for the setting up the flutter environment.
 
-- Once Flutter is installed upgrade the packages using 
+For web you will need [Google Chrome](https://www.google.com.au/intl/en_au/chrome/) to be installed on the system.
 
-    `flutter pub upgrade`
+## Setting up the boilerplate
 
-- Update the configuration class present in configurations folder.
+**Step 1:**
 
-- Run the application using
+Download or clone this repo by using the link below:
 
-    `flutter run`
+```
+https://github.com/deakin-launchpad/flutter2_boilerplate.git
+```
+**Step 2:**
 
-# Guides
+Go to project root and execute the following command in console to get the required dependencies: 
 
-A few resources to get you started if this is your first Flutter project:
+```
+flutter pub get 
+```
+## Running the project
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+flutter run android|ios|chrome
+```
 
-For help getting started with Flutter, view Flutter's [online documentation](https://flutter.dev/docs), which offers tutorials, samples, guidance on mobile development, and a full API reference.
+## Deployment
+
+Follow the platform specific guides given below.
+
+- [iOS](https://flutter.dev/docs/deployment/ios)
+- [Android](https://flutter.dev/docs/deployment/android)
+- [Web](https://flutter.dev/docs/deployment/web)
+
+## Continuous deployment
+
+You can setup a continuous deployment for this project using [fastlane](https://docs.fastlane.tools/) using this [guide](https://flutter.dev/docs/deployment/cd).
