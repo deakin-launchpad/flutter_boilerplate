@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_layout_builder/responsive_layout_builder.dart';
 import 'package:user_onboarding/configurations/configurations.dart';
 import '../../helpers/Layout/LayoutHelper.dart';
 
@@ -17,72 +16,68 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   LayoutHelper _layoutHelper = new LayoutHelper();
 
-  double getButtonSize(context, LayoutSize currentSize) {
-    switch (currentSize) {
-      case LayoutSize.tablet:
-        return MediaQuery.of(context).size.width / 4;
-      case LayoutSize.desktop:
-        return MediaQuery.of(context).size.width / 3;
-      default:
-        return MediaQuery.of(context).size.width;
+  double getButtonSize(context) {
+    if (MediaQuery.of(context).size.width > 1200) {
+      return MediaQuery.of(context).size.width / 4;
     }
+    if (MediaQuery.of(context).size.width > 786) {
+      return MediaQuery.of(context).size.width / 3;
+    }
+    if (MediaQuery.of(context).size.width > 600) {
+      return MediaQuery.of(context).size.width / 2;
+    }
+    return MediaQuery.of(context).size.width;
   }
 
   Widget _loginButton() {
-    return ResponsiveLayoutBuilder(
-      builder: (context, size) {
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, '/login');
-          },
-          child: Container(
-            width: getButtonSize(context, size.size),
-            padding: EdgeInsets.symmetric(vertical: 13),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Color(0xffdf8e33).withAlpha(100),
-                      offset: Offset(2, 4),
-                      blurRadius: 8,
-                      spreadRadius: 2)
-                ],
-                color: Colors.white),
-            child: Text(
-              'Login',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black54,
-              ),
-            ),
-          ),
-        );
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/login');
       },
+      child: Container(
+        width: getButtonSize(context),
+        padding: EdgeInsets.symmetric(vertical: 13),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Color(0xffdf8e33).withAlpha(100),
+                  offset: Offset(2, 4),
+                  blurRadius: 8,
+                  spreadRadius: 2)
+            ],
+            color: Colors.white),
+        child: Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black54,
+          ),
+        ),
+      ),
     );
   }
 
   Widget _signUpButton() {
-    return ResponsiveLayoutBuilder(builder: (context, size) {
-      return InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, '/signup');
-        },
-        child: Container(
-          width: getButtonSize(context, size.size),
-          padding: EdgeInsets.symmetric(vertical: 13),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Colors.white, width: 2),
-          ),
-          child: Text(
-            'Register now',
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/signup');
+      },
+      child: Container(
+        width: getButtonSize(context),
+        padding: EdgeInsets.symmetric(vertical: 13),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Colors.white, width: 2),
         ),
-      );
-    });
+        child: Text(
+          'Register now',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
   }
 
   Widget _label() {
