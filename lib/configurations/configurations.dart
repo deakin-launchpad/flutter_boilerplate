@@ -2,13 +2,23 @@ import 'package:flutter/material.dart';
 import '../models/models.dart';
 
 class Configurations {
+  static final Configurations _instance =
+      new Configurations._privateConstructor();
+
   static final bool devBuild = true;
   static final bool debugBanner = false;
+
+  Configurations._privateConstructor() {
+    debugPrint('Using Config');
+  }
+
+  factory Configurations() => _instance;
 
   final bool _bypassbackend = true;
 
   final String _appTitle = "useronboarding";
   final String _appVersion = "0.0.1";
+  final String _author = 'Sanchit Dang';
   final String _appCopyRight = "Sanchit Dang 2020";
 
   final String _backendUrl = "http://localhost:8041";
@@ -39,4 +49,6 @@ class Configurations {
   UserLoginDetails get getDevDetails => _devDetails;
 
   String get devAccessToken => _devAccessToken;
+
+  String get author => _author;
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../widgets/widgets.dart';
-import '../configurations/configurations.dart';
-import '../helpers/helpers.dart';
-import '../providers/providers.dart';
-import '../models/models.dart';
+import '../../widgets/widgets.dart';
+import '../../configurations/configurations.dart';
+import '../../helpers/helpers.dart';
+import '../../providers/providers.dart';
+import '../../models/models.dart';
 
 class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
