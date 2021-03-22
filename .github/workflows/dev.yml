@@ -20,6 +20,16 @@ jobs:
           flutter-version: 2.0.x
       - name: Get packages
         run: flutter pub get
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: ${{ steps.date.outputs.date }}
+          draft: false
+          prerelease: true
       - name: Build Web
         run: flutter build web
       - name: Compress Web build
@@ -42,16 +52,6 @@ jobs:
           dest: build/ios/payload.zip
       - name: Prepare iOS IPA Step 4
         run: mv build/ios/payload.zip build/ios/application-ios.ipa
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.date.outputs.date }}
-          release_name: ${{ steps.date.outputs.date }}
-          draft: false
-          prerelease: true
       - name: Upload Android build ARM 32 bit
         id: upload-android32-build 
         uses: actions/upload-release-asset@v1
