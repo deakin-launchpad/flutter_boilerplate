@@ -1,11 +1,11 @@
-name: Flutter test build
+name: Flutter dev build
 on:
   push:
       branches:
-        - test
+        - development
   pull_request:
     branches:
-      - test
+      - development
 
 jobs:
   build:
@@ -48,8 +48,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: test-build-${{ steps.date.outputs.date }}
-          release_name: test-build-${{ steps.date.outputs.date }}
+          tag_name: dev-build-${{ steps.date.outputs.date }}
+          release_name: dev-build-${{ steps.date.outputs.date }}
           draft: false
           prerelease: true
       - name: Upload Android build ARM 32 bit
