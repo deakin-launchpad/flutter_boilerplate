@@ -1,4 +1,4 @@
-name: Flutter android build
+name: Flutter test build
 on:
   push:
       branches:
@@ -19,6 +19,6 @@ jobs:
         with:
           flutter-version: 2.0.x
       - run: flutter pub get
-      - run: flutter build apk --debug --split-per-abi
-      - run: flutter build ios --release
       - run: flutter build web
+      - run: flutter build apk --debug --split-per-abi
+      - run: flutter build ios --debug --no-codesign
