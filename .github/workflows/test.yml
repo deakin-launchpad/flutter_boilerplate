@@ -22,19 +22,26 @@ jobs:
         run: flutter pub get
       - name: Build Web
         run: flutter build web
+      - name: Compress Web build
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/web
+          dest: build/web.zip
       - name: Build Android (Debug)
         run: flutter build apk --debug --split-per-abi
       - name: Build iOS (Debug-notsigned) Runner.app
         run: flutter build ios --debug --no-codesign
-      - run: mkdir build/ios/iphoneos/Payload
-      - run: mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload
-      - uses: montudor/action-zip@v0.1.1
+      - name: Prepare iOS IPA Step 1
+        run: mkdir build/ios/iphoneos/Payload
+      - name: Prepare iOS IPA Step 2
+        run: mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload
+      - name: Prepare iOS IPA Step 3
+        uses: papeloto/action-zip@v1
         with:
-          args: zip -r -0 build/ios/payload.zip build/ios/iphoneos/Payload
-      - uses: montudor/action-zip@v0.1.1
-        with:
-          args: zip -r -0 build/web.zip build/web
-      - run: mv build/ios/payload.zip build/ios/application-ios.ipa
+          files: build/ios/iphoneos/Payload
+          dest: build/ios/payload.zip
+      - name: Prepare iOS IPA Step 4
+        run: mv build/ios/payload.zip build/ios/application-ios.ipa
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
