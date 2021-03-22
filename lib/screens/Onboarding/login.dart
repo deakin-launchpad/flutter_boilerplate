@@ -293,7 +293,6 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 class Login extends StatelessWidget {
-  final LayoutHelper _layoutHelper = new LayoutHelper();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   double getFormWidth(context) {

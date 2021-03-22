@@ -21,7 +21,7 @@ class SQLiteHelper {
   }
 
   _initDatabase() async {
-    final dbPath = await (getDatabasesPath() as FutureOr<String>);
+    final dbPath = await getDatabasesPath();
     return openDatabase(path.join(dbPath, _databaseName),
         version: _databaseVersion, onCreate: (Database db, int version) {
       DBCreation.onCreate(db, version);
