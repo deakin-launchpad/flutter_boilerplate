@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-enum ScreenSize { XS, SM, MD, LG, XL }
+import '../../models/models.dart';
 
 class LayoutHelper {
   static final LayoutHelper _instance = LayoutHelper._privateConstructor();

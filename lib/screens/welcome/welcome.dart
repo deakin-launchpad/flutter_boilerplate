@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../configurations/configurations.dart';
+import '../../constants/constants.dart';
 import '../../helpers/Layout/LayoutHelper.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -155,7 +155,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
               ),
               TextSpan(
-                text: Configurations().author,
+                text: Constants.applicationConstants.author,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: _fontSize,
@@ -209,7 +209,9 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: _layoutHelper.isWeb
+                ? MainAxisAlignment.spaceEvenly
+                : MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               _title(),

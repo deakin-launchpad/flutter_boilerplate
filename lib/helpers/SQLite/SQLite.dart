@@ -2,17 +2,16 @@ import 'dart:async';
 
 import 'package:sqflite/sqflite.dart';
 export 'package:sqflite/sqflite.dart';
-
-import '../../configurations/configurations.dart';
+import 'package:path/path.dart' as path;
 
 import './DBCreation.dart';
-
-import 'package:path/path.dart' as path;
+import '../../constants/constants.dart';
 
 class SQLiteHelper {
   static final SQLiteHelper _singleton = SQLiteHelper._privateConstructor();
 
-  static final String _databaseName = Configurations().appTitle + ".db";
+  static final String _databaseName =
+      Constants.applicationConstants.title + ".db";
   static final int _databaseVersion = 1;
   static Database? _database;
 

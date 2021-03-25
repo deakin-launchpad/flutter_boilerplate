@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
 
-import '../../configurations/configurations.dart';
+import '../../constants/constants.dart';
 import "../../helpers/helpers.dart";
 
 class DioInstance {
   final Dio _instance = new Dio();
-  final String _baseUrl = Configurations().backendUrl + '/api/';
+  final String _baseUrl = Constants.connectionConstants.backendUrl + '/api/';
   final int _connectionTimeout = 5000;
   final int _receiveTimeout = 3000;
 
   DioInstance() {
-    if (Configurations.devBuild == true)
+    if (Constants.devBuild == true)
       _instance.interceptors.add(LogInterceptor(responseBody: true));
     _instance.options.baseUrl = _baseUrl;
     logger.i('DIO instance Constructed\nBase Url: ' + _baseUrl.toString());

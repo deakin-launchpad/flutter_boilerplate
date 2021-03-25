@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './screens/screens.dart';
+import 'providers/providers.dart';
 
-import './providers/providers.dart';
-import 'configurations/configurations.dart';
-import './routes/routes.dart';
-import './theme/theme.dart';
+import 'constants/constants.dart';
+import 'screens/screens.dart';
+import 'routes/routes.dart';
+import 'theme/theme.dart';
 
 class Application extends StatelessWidget {
   @override
@@ -18,7 +18,7 @@ class Application extends StatelessWidget {
       ],
       child: Consumer<UserDataProvider>(
         builder: (_, data, __) => MaterialApp(
-          debugShowCheckedModeBanner: Configurations.debugBanner,
+          debugShowCheckedModeBanner: Constants.debugBanner,
           home: data.loginStatus
               ? Home()
               : FutureBuilder(
@@ -30,7 +30,7 @@ class Application extends StatelessWidget {
                             )
                           : WelcomePage(),
                 ),
-          title: Configurations().appTitle,
+          title: Constants.applicationConstants.title,
           theme: ApplicationTheme(context).getAppTheme,
           routes: Routes().base,
         ),

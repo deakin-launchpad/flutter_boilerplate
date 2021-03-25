@@ -1,56 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../helpers/API/api.dart';
-
-class SignupTextFeild extends StatelessWidget {
-  final String? label, hint;
-  final TextInputType? type;
-  final TextInputAction? action;
-  final Function? validator, onSaved, onSubmit;
-  final FocusNode? focusNode;
-  final bool? isPassword;
-  SignupTextFeild({
-    this.hint,
-    this.label,
-    this.action,
-    this.onSubmit,
-    this.onSaved,
-    this.type,
-    this.validator,
-    this.focusNode,
-    this.isPassword,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        focusNode: focusNode,
-        textInputAction: action,
-        onFieldSubmitted: onSubmit as void Function(String)?,
-        obscureText: isPassword == null ? false : isPassword!,
-        decoration: InputDecoration(
-          labelText: label,
-          hintText: hint,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
-        keyboardType: type,
-        onSaved: onSaved as void Function(String?)?,
-        validator: validator as String? Function(String?)?,
-      ),
-    );
-  }
-}
-
-class SignUpValues {
-  String? firstname, lastname, email, password, number;
-
-  SignUpValues(
-      {this.email, this.firstname, this.lastname, this.password, this.number});
-}
+import '../../../models/models.dart';
+import '../../../helpers/API/api.dart';
+import 'signUpTextfField.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -73,7 +24,7 @@ class _SignUpFormState extends State<SignUpForm> {
         padding: EdgeInsets.all(10),
         shrinkWrap: true,
         children: <Widget>[
-          SignupTextFeild(
+          SignupTextField(
             label: 'First Name',
             hint: 'John',
             action: TextInputAction.next,
@@ -91,7 +42,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          SignupTextFeild(
+          SignupTextField(
             focusNode: lastname,
             label: 'Last Name',
             hint: 'Doe',
@@ -110,7 +61,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          SignupTextFeild(
+          SignupTextField(
             focusNode: email,
             label: 'Email',
             hint: 'johndoe@shaktiman.com',
@@ -133,7 +84,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          SignupTextFeild(
+          SignupTextField(
             focusNode: password,
             label: 'Password',
             hint: 'secretpassword',
@@ -153,7 +104,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          SignupTextFeild(
+          SignupTextField(
             focusNode: cpassword,
             label: 'Confirm Password',
             hint: 'secretpassword',
@@ -173,7 +124,7 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          SignupTextFeild(
+          SignupTextField(
             focusNode: number,
             label: 'Number',
             hint: '412345678',
@@ -223,57 +174,6 @@ class _SignUpFormState extends State<SignUpForm> {
             },
           )
         ],
-      ),
-    );
-  }
-}
-
-class SignUp extends StatelessWidget {
-  static String route = '/signup';
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-              Colors.purple,
-              Colors.red,
-              Colors.orange,
-            ])),
-        child: SafeArea(
-          bottom: true,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: Text(
-                  'Flutter User Onboarding',
-                  style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'pricedown',
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                            color: Colors.black,
-                            offset: Offset(2, 2),
-                            blurRadius: 15)
-                      ]),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Card(
-                margin: EdgeInsets.only(left: 30, right: 30, top: 20),
-                color: Colors.white,
-                elevation: 50,
-                child: SignUpForm(),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
