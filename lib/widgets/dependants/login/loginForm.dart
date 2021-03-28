@@ -67,9 +67,9 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _loginButton(Function onPressed) {
+  Widget _loginButton(void Function()? onPressed) {
     return GestureDetector(
-      onTap: onPressed as void Function()?,
+      onTap: onPressed,
       child: new Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),
@@ -128,13 +128,12 @@ class _LoginFormState extends State<LoginForm> {
           isPassword: true,
           focusNode: _passwordFocusNode,
           textInputAction: TextInputAction.done,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.visiblePassword,
           onSaved: (value) {
-            loginValues.username = value;
+            loginValues.password = value;
           },
           validator: (value) {
-            if (value!.isEmpty) return 'Please Enter the Email';
-            if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
+            if (value!.isEmpty) return 'Please enter the password';
             return null;
           },
         ),
@@ -234,7 +233,9 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     void performLogin(Function assignToken) async {
-      if (widget.formKey.currentState!.validate()) {
+      if (widget.formKey.currentState == null)
+        debugPrint('emptyformkey');
+      else if (widget.formKey.currentState!.validate()) {
         widget.formKey.currentState!.save();
         DIOResponseBody loginCheck;
         if (_devModeSwitchValue) {
@@ -255,37 +256,40 @@ class _LoginFormState extends State<LoginForm> {
       }
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        SizedBox(height: widget.height * .2),
-        _title(),
-        SizedBox(height: 50),
-        _emailPasswordWidget(),
-        SizedBox(height: 20),
-        Consumer<UserDataProvider>(
-          builder: (_, data, __) => _loginButton(
-            () {
-              if (Constants.bypassBackend) {
-                data.assignAccessToken(Constants.devAccessToken);
-                Navigator.of(context).pushReplacementNamed('/home');
-                return;
-              }
-              performLogin(data.assignAccessToken);
-            },
+    return Form(
+      key: widget.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(height: widget.height * .2),
+          _title(),
+          SizedBox(height: 50),
+          _emailPasswordWidget(),
+          SizedBox(height: 20),
+          Consumer<UserDataProvider>(
+            builder: (_, data, __) => _loginButton(
+              () {
+                if (Constants.bypassBackend) {
+                  data.assignAccessToken(Constants.devAccessToken);
+                  Navigator.of(context).pushReplacementNamed('/home');
+                  return;
+                }
+                performLogin(data.assignAccessToken);
+              },
+            ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.centerRight,
-          child: Text('Forgot Password ?',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-        ),
-        _divider(),
-        SizedBox(height: widget.height * .055),
-        _createAccountLabel(),
-      ],
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.centerRight,
+            child: Text('Forgot Password ?',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+          ),
+          _divider(),
+          SizedBox(height: widget.height * .055),
+          _createAccountLabel(),
+        ],
+      ),
     );
   }
 }
