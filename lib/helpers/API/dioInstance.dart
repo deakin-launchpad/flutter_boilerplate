@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../models/models.dart';
 import '../../constants/constants.dart';
 import "../../helpers/helpers.dart";
 
@@ -20,5 +21,10 @@ class DioInstance {
 
   Dio get instance {
     return _instance;
+  }
+
+  DIOResponseBody errorHelper(dynamic error) {
+    logger.e(error);
+    return DIOResponseBody(success: false);
   }
 }

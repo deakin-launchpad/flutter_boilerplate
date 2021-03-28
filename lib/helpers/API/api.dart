@@ -5,7 +5,7 @@ import './dioInstance.dart';
 
 class API {
   static final API api = API._privateConstructor();
-  final Dio _dioinstance = DioInstance().instance;
+  final DioInstance _dioInstance = new DioInstance();
 
   API._privateConstructor() {
     print("All APIs initialized.");
@@ -30,19 +30,18 @@ class API {
   }
 
   Future<DIOResponseBody> userLogin(UserLoginDetails details) async {
-    return _dioinstance
+    return _dioInstance.instance
         .post('user/login', data: await details.toLoginApiJSON)
         .then((respone) {
       return DIOResponseBody(
           success: true, data: respone.data['data']['accessToken']);
     }).catchError((error) {
-      return DIOResponseBody(
-          success: false, data: error.response.data['message']);
+      return _dioInstance.errorHelper(error);
     });
   }
 
   Future<bool> accessTokenLogin(accessToken) async {
-    return _dioinstance
+    return _dioInstance.instance
         .post('user/accessTokenLogin',
             options:
                 Options(headers: {'authorization': 'Bearer ' + accessToken}))
@@ -54,7 +53,7 @@ class API {
   }
 
   Future<bool> registerUser(userDetails) async {
-    return _dioinstance
+    return _dioInstance.instance
         .post('user/register', data: userDetails)
         .then((respone) {
       return true;
