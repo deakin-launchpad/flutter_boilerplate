@@ -1,3 +1,3 @@
 class ConnectionConstants {
-  final String backendUrl = '';
+  final String backendUrl = 'http://localhost:8000';
 }

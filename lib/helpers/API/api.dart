@@ -31,7 +31,7 @@ class API {
 
   Future<DIOResponseBody> userLogin(UserLoginDetails details) async {
     return _dioinstance
-        .post('user/login', data: details.toLoginApiJSON)
+        .post('user/login', data: await details.toLoginApiJSON)
         .then((respone) {
       return DIOResponseBody(
           success: true, data: respone.data['data']['accessToken']);
