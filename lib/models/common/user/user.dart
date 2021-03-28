@@ -16,7 +16,8 @@ class DeviceInfo {
       debugPrint('inside web');
       _deviceType = 'WEB';
       WebBrowserInfo _info = await _infoplugin.webBrowserInfo;
-      _deviceName = '${_info.browserName} on ${_info.platform}';
+      _deviceName =
+          '${_info.browserName.toString().split(".").last} on ${_info.platform}';
 
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       void updateWebUUID() {
@@ -35,7 +36,7 @@ class DeviceInfo {
     } else if (Platform.isIOS) {
       _deviceType = 'IOS';
       IosDeviceInfo info = await _infoplugin.iosInfo;
-      _deviceName = '${info.name!.split(".").last} on ${info.systemVersion}';
+      _deviceName = '${info.name} on ${info.systemVersion}';
       _deviceUUID = info.identifierForVendor!;
     } else if (Platform.isAndroid) {
       _deviceType = 'ANDROID';
