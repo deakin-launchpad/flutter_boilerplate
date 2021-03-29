@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/models.dart';
 import '../helpers/API/api.dart';
 
 class UserDataProvider with ChangeNotifier {
   String? _accessToken;
   bool _userLoggedIn = false;
+  bool? _firstSignIn;
 
   Future<bool> accessTokenLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return false;
     var localToken = prefs.getString('accessToken')!;
-    bool status = await API().accessTokenLogin(localToken);
-    if (status) {
+    DIOResponseBody response = await API().accessTokenLogin(localToken);
+    if (response.success) {
       _userLoggedIn = true;
       _accessToken = localToken;
+      _firstSignIn = !response.data['userDetails']['firstLogin'];
       return true;
     } else {
       _userLoggedIn = false;
@@ -29,6 +32,8 @@ class UserDataProvider with ChangeNotifier {
 
   bool get loginStatus => _userLoggedIn;
 
+  bool? get firstSignIn => _firstSignIn;
+
   void assignAccessToken(String token) async {
     if (token != "") {
       _accessToken = token;
@@ -40,12 +45,24 @@ class UserDataProvider with ChangeNotifier {
     }
   }
 
-  void logout() async {
-    _userLoggedIn = false;
-    notifyListeners();
-    _accessToken = null;
+  void changeFirstLoginStatus(bool status) async {
+    _firstSignIn = status;
     final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    prefs.setBool('firstSignIn', status);
+    notifyListeners();
+  }
+
+  void logout(BuildContext context) async {
+    bool response = await API().logout(_accessToken!);
+    if (response || accessToken == null) {
+      _userLoggedIn = false;
+      notifyListeners();
+      _accessToken = null;
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/welcome', (route) => route.isFirst);
+    }
   }
 
   void changeLoginStatus(bool status) {

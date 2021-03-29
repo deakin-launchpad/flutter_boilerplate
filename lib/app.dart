@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'providers/providers.dart';
 
+import 'providers/providers.dart';
 import 'constants/constants.dart';
 import 'screens/screens.dart';
 import 'routes/routes.dart';
@@ -23,12 +22,21 @@ class Application extends StatelessWidget {
               ? Home()
               : FutureBuilder(
                   future: data.accessTokenLogin(),
-                  builder: (_, result) =>
-                      result.connectionState == ConnectionState.waiting
-                          ? Scaffold(
-                              body: Text('Loading..'),
-                            )
-                          : WelcomePage(),
+                  builder: (_, apiResponse) {
+                    if (apiResponse.connectionState == ConnectionState.waiting)
+                      return Scaffold(
+                        body: Text('Loading..'),
+                      );
+                    else if (apiResponse.data == true) {
+                      if (data.firstSignIn == null)
+                        return Scaffold(
+                          body: Text('Loading..'),
+                        );
+                      if (data.firstSignIn == true) return ChangePassword();
+                      return Home();
+                    } else
+                      return WelcomePage();
+                  },
                 ),
           title: Constants.applicationConstants.title,
           theme: ApplicationTheme(context).getAppTheme,

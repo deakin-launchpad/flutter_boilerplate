@@ -1,0 +1,175 @@
+import 'package:flutter/material.dart';
+
+class ChangePasswordForm extends StatefulWidget {
+  @override
+  _ChangePasswordFormState createState() => _ChangePasswordFormState();
+}
+
+class _ChangePasswordFormState extends State<ChangePasswordForm> {
+  GlobalKey<FormState>? _formKey = new GlobalKey();
+  String _currentPassword = '', _newPassword = '', _confirmNewPassword = '';
+
+  Widget _textField(
+    String title, {
+    bool isPassword = false,
+    String? hintText,
+    String? Function(String?)? validator,
+    TextInputAction? textInputAction,
+    void Function(String)? onFieldSubmitted,
+    FocusNode? focusNode,
+    TextInputType? keyboardType,
+    void Function(String?)? onChanged,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            onChanged: onChanged,
+            keyboardType: keyboardType,
+            focusNode: focusNode,
+            onFieldSubmitted: onFieldSubmitted,
+            validator: validator,
+            obscureText: isPassword,
+            textInputAction: textInputAction,
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _changeButton(void Function()? onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: new Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+        child: Text(
+          'Change Password',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  Widget _skipLabel() {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20),
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Skip',
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          Text(
+            'Change Password',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          SizedBox(height: 20),
+
+          _textField(
+            'Current Password',
+            isPassword: true,
+            keyboardType: TextInputType.visiblePassword,
+            onChanged: (value) {
+              _currentPassword = value != null ? value : '';
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Current password empty';
+              return null;
+            },
+          ), //current password
+          _textField(
+            'New Password',
+            isPassword: true,
+            keyboardType: TextInputType.visiblePassword,
+            onChanged: (value) {
+              debugPrint(value);
+              _newPassword = value != null ? value : '';
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) return 'New password empty';
+              return null;
+            },
+          ), //new password
+          _textField(
+            'Confirm Password',
+            isPassword: true,
+            keyboardType: TextInputType.visiblePassword,
+            onChanged: (value) {
+              debugPrint(value);
+              _confirmNewPassword = value != null ? value : '';
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return 'Confirm password empty';
+              if (value != _newPassword) return "Passwords don't match";
+              return null;
+            },
+          ), //confirm password
+          SizedBox(height: 20),
+          _changeButton(() {
+            if (_formKey!.currentState != null) {
+              if (_formKey!.currentState!.validate()) {
+                _formKey!.currentState!.save();
+              }
+            }
+          }),
+          _skipLabel(),
+        ],
+      ),
+    );
+  }
+}

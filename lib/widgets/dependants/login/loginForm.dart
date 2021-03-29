@@ -232,24 +232,27 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    void performLogin(Function assignToken) async {
+    void performLogin(
+        Function assignToken, Function changeFirstLoginStatus) async {
       if (widget.formKey.currentState == null)
         debugPrint('emptyformkey');
       else if (widget.formKey.currentState!.validate()) {
         widget.formKey.currentState!.save();
-        DIOResponseBody loginCheck;
+        DIOResponseBody response;
         if (_devModeSwitchValue) {
-          loginCheck = await API().userLogin(Constants.devUser);
+          response = await API().userLogin(Constants.devUser);
         } else {
-          loginCheck = await API().userLogin(loginValues);
+          response = await API().userLogin(loginValues);
         }
-        if (loginCheck.success) {
-          assignToken(loginCheck.data);
+        if (response.success) {
+          debugPrint(response.data.toString());
+          assignToken(response.data['accessToken']);
+          changeFirstLoginStatus(!response.data['userDetails']['firstLogin']);
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             new SnackBar(
-              content: Text(loginCheck.data),
+              content: Text(response.data),
             ),
           );
         }
@@ -275,7 +278,8 @@ class _LoginFormState extends State<LoginForm> {
                   Navigator.of(context).pushReplacementNamed('/home');
                   return;
                 }
-                performLogin(data.assignAccessToken);
+                performLogin(
+                    data.assignAccessToken, data.changeFirstLoginStatus);
               },
             ),
           ),

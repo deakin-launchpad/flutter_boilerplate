@@ -7,7 +7,9 @@ class Routes {
     WelcomePage.route: (ctx) => WelcomePage(),
     '/login': (ctx) => Login(),
     '/home': (ctx) => Home(),
-    SignUp.route: (ctx) => SignUp()
+    SignUp.route: (ctx) => SignUp(),
+    ChangePassword.route: (ctx) => ChangePassword(),
+    DevEnvironment.route: (ctx) => DevEnvironment()
   };
 
   Widget landingPage = Home();

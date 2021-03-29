@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../providers/providers.dart';
 import '../../models/models.dart';
 import './dioInstance.dart';
 
@@ -13,6 +14,12 @@ class API {
 
   factory API() {
     return api;
+  }
+
+  // To get accesstoken
+  // ignore: unused_element
+  Future<String?> get _accessToken async {
+    return UserDataProvider().accessToken;
   }
 
   DIOResponseBody errorHelper(error) {
@@ -33,22 +40,21 @@ class API {
     return _dioInstance.instance
         .post('user/login', data: await details.toLoginApiJSON)
         .then((respone) {
-      return DIOResponseBody(
-          success: true, data: respone.data['data']['accessToken']);
+      return DIOResponseBody(success: true, data: respone.data['data']);
     }).catchError((error) {
       return _dioInstance.errorHelper(error);
     });
   }
 
-  Future<bool> accessTokenLogin(accessToken) async {
+  Future<DIOResponseBody> accessTokenLogin(accessToken) async {
     return _dioInstance.instance
         .post('user/accessTokenLogin',
             options:
                 Options(headers: {'authorization': 'Bearer ' + accessToken}))
-        .then((respone) {
-      return true;
+        .then((response) {
+      return DIOResponseBody(success: true, data: response.data['data']);
     }).catchError((error) {
-      return false;
+      return _dioInstance.errorHelper(error);
     });
   }
 
@@ -61,5 +67,15 @@ class API {
       print(error.response);
       return false;
     });
+  }
+
+  Future<bool> logout(String token) {
+    return _dioInstance.instance
+        .put(
+          'user/logout',
+          options: Options(headers: {'authorization': 'Bearer ' + token}),
+        )
+        .then((value) => true)
+        .catchError((err) => false);
   }
 }

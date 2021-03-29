@@ -13,14 +13,13 @@ class Home extends StatelessWidget {
             GestureDetector(
                 onTap: () {},
                 child: Consumer<UserDataProvider>(
-                    builder: (_, data, __) => TextButton(
+                    builder: (context, data, __) => TextButton(
                           child: Text(
                             'Logout',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.black),
                           ),
                           onPressed: () {
-                            data.logout();
-                            Navigator.pushReplacementNamed(context, '/');
+                            data.logout(context);
                           },
                         )))
           ],
