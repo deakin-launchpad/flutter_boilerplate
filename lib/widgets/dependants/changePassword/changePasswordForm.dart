@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:user_onboarding/providers/providers.dart';
 
+import '../../../providers/providers.dart';
 import '../../../helpers/helpers.dart';
 import '../../../models/models.dart';
 

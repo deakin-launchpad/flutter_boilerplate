@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:user_onboarding/models/dependants/dependants.dart';
 
+import 'models/models.dart';
 import 'widgets/widgets.dart';
 import 'providers/providers.dart';
 import 'constants/constants.dart';
