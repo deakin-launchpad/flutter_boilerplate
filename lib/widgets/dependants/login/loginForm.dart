@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:user_onboarding/models/dependants/api/login.dart';
 import '../../../constants/constants.dart';
 import '../../../helpers/helpers.dart';
 import '../../../providers/providers.dart';
@@ -21,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _devModeSwitchValue = false;
   final _passwordFocusNode = FocusNode();
   final _usernameFocusNode = FocusNode();
-  final UserLoginDetails loginValues = UserLoginDetails();
+  final LoginAPIBody loginValues = LoginAPIBody();
 
   Widget _textField(
     String title, {
@@ -247,7 +248,6 @@ class _LoginFormState extends State<LoginForm> {
         if (response.success) {
           debugPrint(response.data.toString());
           assignToken(response.data['accessToken']);
-          changeFirstLoginStatus(!response.data['userDetails']['firstLogin']);
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

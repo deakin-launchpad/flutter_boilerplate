@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:user_onboarding/models/dependants/dependants.dart';
 
+import 'widgets/widgets.dart';
 import 'providers/providers.dart';
 import 'constants/constants.dart';
 import 'screens/screens.dart';
@@ -24,16 +26,27 @@ class Application extends StatelessWidget {
                   future: data.accessTokenLogin(),
                   builder: (_, apiResponse) {
                     if (apiResponse.connectionState == ConnectionState.waiting)
-                      return Scaffold(
-                        body: Text('Loading..'),
-                      );
+                      return LoadingScreen(
+                          Constants.applicationConstants.title);
                     else if (apiResponse.data == true) {
-                      if (data.firstSignIn == null)
-                        return Scaffold(
-                          body: Text('Loading..'),
-                        );
-                      if (data.firstSignIn == true) return ChangePassword();
-                      return Home();
+                      return FutureBuilder(
+                        future: data.getUserProfile(),
+                        builder: (context, apiResponse) {
+                          if (apiResponse.connectionState ==
+                              ConnectionState.waiting) {
+                            return LoadingScreen(
+                                Constants.applicationConstants.title);
+                          }
+                          if (apiResponse.hasError)
+                            return LoadingScreen(apiResponse.error.toString());
+
+                          if (apiResponse.data != null) if ((apiResponse.data
+                                      as UserProfileAPIBody)
+                                  .firstLogin ==
+                              false) return ChangePassword();
+                          return Home();
+                        },
+                      );
                     } else
                       return WelcomePage();
                   },

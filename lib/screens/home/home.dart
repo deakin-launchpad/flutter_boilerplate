@@ -31,12 +31,13 @@ class Home extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Flexible(
-                      child: Text(
-                    data.accessToken != null
-                        ? 'accessToken: ${data.accessToken}'
-                        : 'Empty',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ))
+                    child: Text(
+                      data.accessToken != null
+                          ? 'accessToken: ${data.accessToken}'
+                          : 'Empty',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  )
                 ],
               ),
             ),

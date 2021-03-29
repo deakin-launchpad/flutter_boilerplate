@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:user_onboarding/providers/providers.dart';
+
+import '../../../helpers/helpers.dart';
+import '../../../models/models.dart';
 
 class ChangePasswordForm extends StatefulWidget {
   @override
@@ -7,7 +11,7 @@ class ChangePasswordForm extends StatefulWidget {
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
   GlobalKey<FormState>? _formKey = new GlobalKey();
-  String _currentPassword = '', _newPassword = '', _confirmNewPassword = '';
+  String _currentPassword = '', _newPassword = '';
 
   Widget _textField(
     String title, {
@@ -53,6 +57,21 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     );
   }
 
+  Future<void> changePassword(bool skip) async {
+    ChangePasswordAPIBody apiBody = new ChangePasswordAPIBody(
+      skip: skip,
+      oldPassword: _currentPassword,
+      newPassword: _newPassword,
+    );
+    DIOResponseBody response = await API().changePassword(apiBody);
+    if (response.success) {
+      Provider.of<UserDataProvider>(context, listen: false).getUserProfile();
+      Navigator.pushReplacementNamed(context, '/home');
+    } else
+      ScaffoldMessenger.of(context)
+          .showSnackBar(new SnackBar(content: Text(response.data)));
+  }
+
   Widget _changeButton(void Function()? onPressed) {
     return GestureDetector(
       onTap: onPressed,
@@ -83,7 +102,9 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   Widget _skipLabel() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        changePassword(true);
+      },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
         padding: EdgeInsets.all(15),
@@ -136,7 +157,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             isPassword: true,
             keyboardType: TextInputType.visiblePassword,
             onChanged: (value) {
-              debugPrint(value);
               _newPassword = value != null ? value : '';
             },
             validator: (value) {
@@ -148,10 +168,6 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             'Confirm Password',
             isPassword: true,
             keyboardType: TextInputType.visiblePassword,
-            onChanged: (value) {
-              debugPrint(value);
-              _confirmNewPassword = value != null ? value : '';
-            },
             validator: (value) {
               if (value == null || value.isEmpty)
                 return 'Confirm password empty';
@@ -164,6 +180,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             if (_formKey!.currentState != null) {
               if (_formKey!.currentState!.validate()) {
                 _formKey!.currentState!.save();
+                changePassword(false);
               }
             }
           }),

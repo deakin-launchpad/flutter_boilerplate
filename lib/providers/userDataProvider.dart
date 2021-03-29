@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_onboarding/helpers/helpers.dart';
+import 'package:user_onboarding/models/dependants/api/userProfile.dart';
 import '../models/models.dart';
 import '../helpers/API/api.dart';
 
@@ -7,6 +9,7 @@ class UserDataProvider with ChangeNotifier {
   String? _accessToken;
   bool _userLoggedIn = false;
   bool? _firstSignIn;
+  UserProfileAPIBody? _userProfile;
 
   Future<bool> accessTokenLogin() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,6 +36,8 @@ class UserDataProvider with ChangeNotifier {
   bool get loginStatus => _userLoggedIn;
 
   bool? get firstSignIn => _firstSignIn;
+
+  UserProfileAPIBody? get userProfile => _userProfile;
 
   void assignAccessToken(String token) async {
     if (token != "") {
@@ -68,5 +73,14 @@ class UserDataProvider with ChangeNotifier {
   void changeLoginStatus(bool status) {
     _userLoggedIn = status;
     notifyListeners();
+  }
+
+  Future<UserProfileAPIBody?> getUserProfile() async {
+    DIOResponseBody response = await API().getProfile();
+    if (response.success) {
+      _userProfile = UserProfileAPIBody.fromJson(response.data);
+    }
+    notifyListeners();
+    return _userProfile;
   }
 }

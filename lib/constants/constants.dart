@@ -9,7 +9,7 @@ class Constants {
   static const bool debugBanner = false;
   static const bool bypassBackend = false;
   static const String devAccessToken = '';
-  static final UserLoginDetails devUser = UserLoginDetails(
+  static final LoginAPIBody devUser = LoginAPIBody(
     username: 'user@launchpad.com',
     password: 'password',
   );

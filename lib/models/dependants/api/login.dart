@@ -1,9 +1,9 @@
-import '../deviceInfo/deviceInfo.dart';
+import '../../common/deviceInfo/deviceInfo.dart';
 
-class UserLoginDetails {
+class LoginAPIBody {
   String? username;
   String? password;
-  UserLoginDetails({this.username, this.password});
+  LoginAPIBody({this.username, this.password});
 
   Future<Map<String, dynamic?>> get toLoginApiJSON async {
     DeviceInfo _plugin = new DeviceInfo();

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:user_onboarding/helpers/helpers.dart';
 
-import '../../providers/providers.dart';
 import '../../models/models.dart';
 import './dioInstance.dart';
 
@@ -16,27 +16,7 @@ class API {
     return api;
   }
 
-  // To get accesstoken
-  // ignore: unused_element
-  Future<String?> get _accessToken async {
-    return UserDataProvider().accessToken;
-  }
-
-  DIOResponseBody errorHelper(error) {
-    if (error == null)
-      return DIOResponseBody(success: false, data: 'Network Error');
-    if (error.response == null)
-      return DIOResponseBody(success: false, data: "Network Error");
-    if (error.response == null)
-      return DIOResponseBody(
-          success: false, data: 'Connection to Backend Failed');
-    if (error.response.data["message"] != null)
-      return DIOResponseBody(
-          success: false, data: error.response.data["message"]);
-    return DIOResponseBody(success: false, data: "Oops! Something went wrong!");
-  }
-
-  Future<DIOResponseBody> userLogin(UserLoginDetails details) async {
+  Future<DIOResponseBody> userLogin(LoginAPIBody details) async {
     return _dioInstance.instance
         .post('user/login', data: await details.toLoginApiJSON)
         .then((respone) {
@@ -46,7 +26,7 @@ class API {
     });
   }
 
-  Future<DIOResponseBody> accessTokenLogin(accessToken) async {
+  Future<DIOResponseBody> accessTokenLogin(String accessToken) async {
     return _dioInstance.instance
         .post('user/accessTokenLogin',
             options:
@@ -77,5 +57,38 @@ class API {
         )
         .then((value) => true)
         .catchError((err) => false);
+  }
+
+  Future<DIOResponseBody> changePassword(ChangePasswordAPIBody data) async {
+    return _dioInstance.instance
+        .put(
+          'user/changePassword',
+          data: data.toJSON(),
+          options: Options(
+            headers: {
+              'authorization': 'Bearer ' + await _dioInstance.accessToken
+            },
+          ),
+        )
+        .then((response) => DIOResponseBody(
+              success: true,
+              data: response.data['data'],
+            ))
+        .catchError((onError) => _dioInstance.errorHelper(onError));
+  }
+
+  Future<DIOResponseBody> getProfile() async {
+    return _dioInstance.instance
+        .get(
+          'user/getProfile',
+          options: Options(
+            headers: {
+              'authorization': 'Bearer ' + await _dioInstance.accessToken
+            },
+          ),
+        )
+        .then((response) => DIOResponseBody(
+            success: true, data: response.data['data']['customerData']))
+        .catchError((onError) => _dioInstance.errorHelper(onError));
   }
 }
