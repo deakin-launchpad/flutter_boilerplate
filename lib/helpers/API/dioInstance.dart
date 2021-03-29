@@ -25,6 +25,7 @@ class DioInstance {
 
   DIOResponseBody errorHelper(dynamic error) {
     logger.e(error);
-    return DIOResponseBody(success: false);
+    return DIOResponseBody(
+        success: false, data: error.response.data["message"]);
   }
 }
