@@ -35,7 +35,7 @@ dependencies:
 
   #Icons
   cupertino_icons: 1.0.3
-  flutter_icons: 2.0.0
+  fluttericon: 2.0.0
   google_fonts: 2.1.0
 
 dev_dependencies:
