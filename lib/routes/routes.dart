@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../screens/screens.dart';
+export './loginRouter.dart';
 
 class Routes {
   Map<String, WidgetBuilder> base = {

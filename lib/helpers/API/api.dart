@@ -37,15 +37,11 @@ class API {
     });
   }
 
-  Future<bool> registerUser(userDetails) async {
+  Future<DIOResponseBody> registerUser(userDetails) async {
     return _dioInstance.instance
         .post('user/register', data: userDetails)
-        .then((respone) {
-      return true;
-    }).catchError((error) {
-      print(error.response);
-      return false;
-    });
+        .then((respone) => DIOResponseBody(success: true))
+        .catchError((error) => _dioInstance.errorHelper(error));
   }
 
   Future<bool> logout(String token) {

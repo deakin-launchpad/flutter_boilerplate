@@ -20,25 +20,22 @@ class SignupTextField extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
-        focusNode: focusNode,
-        textInputAction: action,
-        onFieldSubmitted: onSubmit as void Function(String)?,
-        obscureText: isPassword == null ? false : isPassword!,
-        decoration: InputDecoration(
-          labelText: label,
-          hintText: hint,
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-        ),
+        onChanged: onSaved as void Function(String?)?,
         keyboardType: type,
-        onSaved: onSaved as void Function(String?)?,
+        focusNode: focusNode,
+        onFieldSubmitted: onSubmit as void Function(String)?,
         validator: validator as String? Function(String?)?,
+        obscureText: isPassword == null ? false : isPassword!,
+        textInputAction: action,
+        decoration: InputDecoration(
+          hintText: label,
+          border: InputBorder.none,
+          fillColor: Color(0xfff3f3f4),
+          filled: true,
+        ),
       ),
     );
   }

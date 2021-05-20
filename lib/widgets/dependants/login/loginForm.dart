@@ -201,7 +201,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget _createAccountLabel() {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '  /signup');
+        Navigator.pushNamed(context, '/signup');
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20),
@@ -245,7 +245,6 @@ class _LoginFormState extends State<LoginForm> {
           response = await API().userLogin(loginValues);
         }
         if (response.success) {
-          debugPrint(response.data.toString());
           assignToken(response.data['accessToken']);
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {

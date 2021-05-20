@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../models/models.dart';
 import '../../../helpers/API/api.dart';
 import 'signUpTextfField.dart';
+import '../../../models/common/deviceInfo/deviceInfo.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -16,17 +17,45 @@ class _SignUpFormState extends State<SignUpForm> {
   final password = FocusNode();
   final cpassword = FocusNode();
   final number = FocusNode();
+  Widget _button(void Function()? onPressed, String label) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: new Container(
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+        child: Text(
+          label,
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _signUpFormKey,
-      child: ListView(
-        padding: EdgeInsets.all(10),
-        shrinkWrap: true,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SignupTextField(
-            label: 'First Name',
-            hint: 'John',
+            label: 'Name',
+            hint: 'John Doe',
             action: TextInputAction.next,
             onSaved: (value) {
               signUpValues.firstname = value;
@@ -43,32 +72,13 @@ class _SignUpFormState extends State<SignUpForm> {
             },
           ),
           SignupTextField(
-            focusNode: lastname,
-            label: 'Last Name',
-            hint: 'Doe',
-            action: TextInputAction.next,
-            type: TextInputType.text,
-            onSaved: (value) {
-              signUpValues.lastname = value;
-            },
-            onSubmit: (_) {
-              FocusScope.of(context).requestFocus(email);
-            },
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter the last name';
-              }
-              return null;
-            },
-          ),
-          SignupTextField(
             focusNode: email,
             label: 'Email',
-            hint: 'johndoe@shaktiman.com',
+            hint: 'johndoe@example.com',
             action: TextInputAction.next,
             type: TextInputType.text,
             onSaved: (value) {
-              signUpValues.lastname = value;
+              signUpValues.email = value;
             },
             onSubmit: (_) {
               FocusScope.of(context).requestFocus(password);
@@ -142,37 +152,34 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
           ),
-          ElevatedButton(
-            child: Text('SignUp'),
-            onPressed: () async {
-              print(signUpValues.number);
-              var response = await API().registerUser({
-                "firstName": signUpValues.firstname.toString(),
-                "lastName": signUpValues.lastname.toString(),
-                "emailId": signUpValues.email.toString(),
-                "phoneNumber": signUpValues.number.toString(),
-                "countryCode": "+61",
-                "password": signUpValues.password
-              });
-              if (response) {
-                ScaffoldMessenger(
-                  child: Text('User Registered'),
-                );
-                return;
-              } else {
-                ScaffoldMessenger(
-                  child: new Text('Registration Error!'),
-                );
-                return;
-              }
-            },
-          ),
-          ElevatedButton(
-            child: Text('Back'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
+          _button(() async {
+            DeviceInfo _plugin = new DeviceInfo();
+            DIOResponseBody response = await API().registerUser({
+              "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+              "lastName": signUpValues.firstname!.split(' ').length == 1
+                  ? signUpValues.firstname!.split(' ')[0]
+                  : signUpValues.firstname!.split(' ')[1],
+              "emailId": signUpValues.email.toString(),
+              "phoneNumber": signUpValues.number.toString(),
+              "countryCode": "+61",
+              "password": signUpValues.password,
+              "deviceData": await _plugin.info
+            });
+            if (response.success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                new SnackBar(
+                  content: Text('User Registered'),
+                ),
+              );
+              return Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                new SnackBar(
+                  content: Text(response.data),
+                ),
+              );
+            }
+          }, 'SignUp'),
         ],
       ),
     );

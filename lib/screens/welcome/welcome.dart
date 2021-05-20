@@ -80,34 +80,6 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget _label() {
-    return Container(
-        margin: EdgeInsets.only(top: 40, bottom: 20),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Quick login with Touch ID',
-              style: TextStyle(color: Colors.white, fontSize: 17),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Icon(Icons.fingerprint, size: 90, color: Colors.white),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Touch ID',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ],
-        ));
-  }
-
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
@@ -173,10 +145,6 @@ class _WelcomePageState extends State<WelcomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _loginButton(),
-        SizedBox(
-          height: 20,
-        ),
-        _signUpButton(),
       ],
     );
   }
@@ -209,9 +177,7 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: _layoutHelper.isWeb
-                ? MainAxisAlignment.spaceEvenly
-                : MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               _title(),
@@ -222,7 +188,6 @@ class _WelcomePageState extends State<WelcomePage> {
               SizedBox(
                 height: 20,
               ),
-              if (!_layoutHelper.isWeb) _label(),
               _authorText(),
             ],
           ),
