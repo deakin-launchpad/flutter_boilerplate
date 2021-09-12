@@ -5,7 +5,20 @@ import 'constants/constants.dart';
 import 'routes/routes.dart';
 import 'theme/theme.dart';
 
-class Application extends StatelessWidget {
+class Application extends StatefulWidget {
+  @override
+  State<Application> createState() => _ApplicationState();
+}
+
+class _ApplicationState extends State<Application> {
+  Routes routerInstance = new Routes();
+
+  @override
+  void initState() {
+    super.initState();
+    routerInstance.configureRoutes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -19,7 +32,7 @@ class Application extends StatelessWidget {
         home: LoginRouter(),
         title: Constants.applicationConstants.title,
         theme: ApplicationTheme(context).getAppTheme,
-        routes: Routes().base,
+        onGenerateRoute: routerInstance.router.generator,
       ),
     );
   }

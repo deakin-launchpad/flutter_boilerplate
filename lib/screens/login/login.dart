@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/widgets.dart';
 
 class Login extends StatelessWidget {
+  static String route = '/login';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   double getFormWidth(context) {

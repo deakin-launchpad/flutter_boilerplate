@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import '../../providers/providers.dart';
 
 class Home extends StatelessWidget {
+  static final String route = '/home';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
