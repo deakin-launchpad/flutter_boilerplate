@@ -1,8 +1,8 @@
-# Flutter 2 Boilerplate (version 1.2.0)
+# Flutter 2 Boilerplate (version 1.3.0)
 
 A boilerplate project created in flutter. Boilerplate supports both web and mobile. VSCode is recommended in this project.
 
-Current Flutter Version : 2.2.2 
+Current Flutter Version : 2.5.0 
 
 ## Getting Started
 
