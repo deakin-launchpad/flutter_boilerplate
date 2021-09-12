@@ -3,12 +3,24 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationTheme {
   ThemeData? _theme;
+  bool useDarkMode = false;
 
   ApplicationTheme(BuildContext context) {
     final TextTheme _textTheme = Theme.of(context).textTheme;
-    _theme = ThemeData.light().copyWith(
+    final TextTheme _googleTextTheme =
+        GoogleFonts.openSansTextTheme(_textTheme).copyWith(
+      bodyText1: GoogleFonts.montserrat(textStyle: _textTheme.bodyText1),
+    );
+
+    final ThemeData _baseTheme =
+        useDarkMode ? ThemeData.dark() : ThemeData.light();
+
+    _theme = _baseTheme.copyWith(
+      colorScheme: _baseTheme.colorScheme.copyWith(
+        primary: Colors.white,
+        secondary: Colors.blueAccent,
+      ),
       primaryColor: Colors.white,
-      accentColor: Colors.blueAccent,
       appBarTheme: AppBarTheme(
         actionsIconTheme: IconThemeData(
           color: Colors.white,
@@ -18,9 +30,8 @@ class ApplicationTheme {
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
-        textTheme: GoogleFonts.latoTextTheme(_textTheme).copyWith(
-          bodyText1: GoogleFonts.montserrat(textStyle: _textTheme.bodyText1),
-        ),
+        titleTextStyle: _googleTextTheme.headline6,
+        toolbarTextStyle: _googleTextTheme.headline5,
       ),
       primaryTextTheme: TextTheme(
         headline6: ThemeData.light().primaryTextTheme.headline6!.copyWith(

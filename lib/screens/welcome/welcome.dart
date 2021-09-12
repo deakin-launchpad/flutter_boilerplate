@@ -111,29 +111,30 @@ class _WelcomePageState extends State<WelcomePage> {
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: 'Developed',
-            style: GoogleFonts.portLligatSans(
-              textStyle: Theme.of(context).textTheme.headline1,
-              fontSize: _fontSize,
-              fontWeight: FontWeight.w700,
-              color: Colors.white70,
+          text: 'Developed',
+          style: GoogleFonts.portLligatSans(
+            textStyle: Theme.of(context).textTheme.headline1,
+            fontSize: _fontSize,
+            fontWeight: FontWeight.w700,
+            color: Colors.white70,
+          ),
+          children: [
+            TextSpan(
+              text: ' By ',
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: _fontSize,
+              ),
             ),
-            children: [
-              TextSpan(
-                text: ' By ',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: _fontSize,
-                ),
+            TextSpan(
+              text: Constants.applicationConstants.author,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: _fontSize,
               ),
-              TextSpan(
-                text: Constants.applicationConstants.author,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: _fontSize,
-                ),
-              ),
-            ]),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -145,6 +146,10 @@ class _WelcomePageState extends State<WelcomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _loginButton(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
+        _signUpButton(),
       ],
     );
   }
@@ -160,10 +165,11 @@ class _WelcomePageState extends State<WelcomePage> {
           decoration: BoxDecoration(
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
+                color: Colors.grey.shade200,
+                offset: Offset(2, 4),
+                blurRadius: 5,
+                spreadRadius: 2,
+              )
             ],
             gradient: LinearGradient(
               begin: Alignment.topLeft,
