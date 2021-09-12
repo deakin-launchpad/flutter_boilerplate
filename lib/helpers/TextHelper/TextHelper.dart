@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 class TextHelper {
-  static final TextHelper _instance = new TextHelper._privateConstructor();
+  static final TextHelper _instance = TextHelper._privateConstructor();
 
   TextHelper._privateConstructor() {
-    print("TextHelper initialized.");
+    debugPrint("TextHelper initialized.");
   }
 
   factory TextHelper() {
@@ -12,6 +14,6 @@ class TextHelper {
   bool validateEmail(String email) {
     Pattern emailPattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    return new RegExp(emailPattern as String).hasMatch(email);
+    return RegExp(emailPattern as String).hasMatch(email);
   }
 }

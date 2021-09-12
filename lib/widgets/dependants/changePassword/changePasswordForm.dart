@@ -10,7 +10,7 @@ class ChangePasswordForm extends StatefulWidget {
 }
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
-  GlobalKey<FormState>? _formKey = new GlobalKey();
+  final GlobalKey<FormState>? _formKey = GlobalKey();
   String _currentPassword = '', _newPassword = '';
 
   Widget _textField(
@@ -25,16 +25,16 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     void Function(String?)? onChanged,
   }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -48,7 +48,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             decoration: InputDecoration(
               hintText: hintText,
               border: InputBorder.none,
-              fillColor: Color(0xfff3f3f4),
+              fillColor: const Color(0xfff3f3f4),
               filled: true,
             ),
           )
@@ -58,7 +58,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
   }
 
   Future<void> changePassword(bool skip) async {
-    ChangePasswordAPIBody apiBody = new ChangePasswordAPIBody(
+    ChangePasswordAPIBody apiBody = ChangePasswordAPIBody(
       skip: skip,
       oldPassword: _currentPassword,
       newPassword: _newPassword,
@@ -67,32 +67,33 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     if (response.success) {
       Provider.of<UserDataProvider>(context, listen: false).getUserProfile();
       Navigator.pushReplacementNamed(context, '/home');
-    } else
+    } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(new SnackBar(content: Text(response.data)));
+          .showSnackBar(SnackBar(content: Text(response.data)));
+    }
   }
 
   Widget _changeButton(void Function()? onPressed) {
     return GestureDetector(
       onTap: onPressed,
-      child: new Container(
+      child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
+                  offset: const Offset(2, 4),
                   blurRadius: 5,
                   spreadRadius: 2)
             ],
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: Text(
+        child: const Text(
           'Change Password',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
@@ -106,12 +107,12 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         changePassword(true);
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
+        margin: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.all(15),
         alignment: Alignment.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: const <Widget>[
             Text(
               'Skip',
               style: TextStyle(
@@ -131,24 +132,25 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       key: _formKey,
       child: Column(
         children: [
-          Text(
+          const Text(
             'Change Password',
             style: TextStyle(
               fontSize: 20,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           _textField(
             'Current Password',
             isPassword: true,
             keyboardType: TextInputType.visiblePassword,
             onChanged: (value) {
-              _currentPassword = value != null ? value : '';
+              _currentPassword = value ?? '';
             },
             validator: (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return 'Current password empty';
+              }
               return null;
             },
           ), //current password
@@ -157,7 +159,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             isPassword: true,
             keyboardType: TextInputType.visiblePassword,
             onChanged: (value) {
-              _newPassword = value != null ? value : '';
+              _newPassword = value ?? '';
             },
             validator: (value) {
               if (value == null || value.isEmpty) return 'New password empty';
@@ -169,13 +171,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             isPassword: true,
             keyboardType: TextInputType.visiblePassword,
             validator: (value) {
-              if (value == null || value.isEmpty)
+              if (value == null || value.isEmpty) {
                 return 'Confirm password empty';
+              }
               if (value != _newPassword) return "Passwords don't match";
               return null;
             },
           ), //confirm password
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _changeButton(() {
             if (_formKey!.currentState != null) {
               if (_formKey!.currentState!.validate()) {

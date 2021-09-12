@@ -1,7 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
 class WebInfo {
-  DeviceInfoPlugin _infoplugin = new DeviceInfoPlugin();
+  final DeviceInfoPlugin _infoplugin = DeviceInfoPlugin();
   String uuid;
 
   WebInfo({required this.uuid});

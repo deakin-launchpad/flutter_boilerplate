@@ -1,14 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../models/models.dart';
 import './dioInstance.dart';
 
 class API {
   static final API api = API._privateConstructor();
-  final DioInstance _dioInstance = new DioInstance();
+  final DioInstance _dioInstance = DioInstance();
 
   API._privateConstructor() {
-    print("All APIs initialized.");
+    debugPrint("All APIs initialized.");
   }
 
   factory API() {

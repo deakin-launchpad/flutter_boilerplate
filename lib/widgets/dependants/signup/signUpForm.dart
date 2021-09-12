@@ -20,27 +20,28 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget _button(void Function()? onPressed, String label) {
     return GestureDetector(
       onTap: onPressed,
-      child: new Container(
+      child: Container(
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
+                color: Colors.grey.shade200,
+                offset: const Offset(2, 4),
+                blurRadius: 5,
+                spreadRadius: 2,
+              )
             ],
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
         child: Text(
           label,
-          style: TextStyle(fontSize: 20, color: Colors.white),
+          style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
     );
@@ -89,7 +90,7 @@ class _SignUpFormState extends State<SignUpForm> {
               }
               Pattern emailPattern =
                   r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-              RegExp regex = new RegExp(emailPattern as String);
+              RegExp regex = RegExp(emailPattern as String);
               if (!regex.hasMatch(value)) return 'Enter Valid Email';
               return null;
             },
@@ -141,7 +142,6 @@ class _SignUpFormState extends State<SignUpForm> {
             action: TextInputAction.done,
             type: TextInputType.number,
             onSaved: (value) {
-              print(value);
               signUpValues.number = value;
             },
             onSubmit: (_) {},
@@ -153,7 +153,7 @@ class _SignUpFormState extends State<SignUpForm> {
             },
           ),
           _button(() async {
-            DeviceInfo _plugin = new DeviceInfo();
+            DeviceInfo _plugin = DeviceInfo();
             DIOResponseBody response = await API().registerUser({
               "firstName": signUpValues.firstname!.split(' ')[0].toString(),
               "lastName": signUpValues.firstname!.split(' ').length == 1
@@ -167,14 +167,14 @@ class _SignUpFormState extends State<SignUpForm> {
             });
             if (response.success) {
               ScaffoldMessenger.of(context).showSnackBar(
-                new SnackBar(
+                const SnackBar(
                   content: Text('User Registered'),
                 ),
               );
               return Navigator.of(context).pop();
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                new SnackBar(
+                SnackBar(
                   content: Text(response.data),
                 ),
               );

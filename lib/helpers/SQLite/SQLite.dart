@@ -12,7 +12,7 @@ class SQLiteHelper {
 
   static final String _databaseName =
       Constants.applicationConstants.title + ".db";
-  static final int _databaseVersion = 1;
+  static const int _databaseVersion = 1;
   static Database? _database;
 
   factory SQLiteHelper() {
@@ -66,10 +66,11 @@ class SQLiteHelper {
   static Future<int> delete(
       {required int id, String? table, String? whereCondition}) async {
     Database? db = await _singleton.database;
-    if (null != whereCondition)
+    if (null != whereCondition) {
       return await db!.delete(table!, where: whereCondition, whereArgs: [id]);
-    else
+    } else {
       return await db!.delete(table!, whereArgs: [id]);
+    }
   }
 
   static Future<int?> queryRowCount(String table) async {

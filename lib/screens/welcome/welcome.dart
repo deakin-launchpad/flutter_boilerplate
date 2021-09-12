@@ -5,7 +5,7 @@ import '../../helpers/Layout/LayoutHelper.dart';
 
 class WelcomePage extends StatefulWidget {
   static String route = '/welcome';
-  WelcomePage({Key? key, this.title}) : super(key: key);
+  const WelcomePage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -14,7 +14,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  LayoutHelper _layoutHelper = new LayoutHelper();
+  final LayoutHelper _layoutHelper = LayoutHelper();
 
   double getButtonSize(context) {
     if (MediaQuery.of(context).size.width > 1200) {
@@ -36,19 +36,19 @@ class _WelcomePageState extends State<WelcomePage> {
       },
       child: Container(
         width: getButtonSize(context),
-        padding: EdgeInsets.symmetric(vertical: 13),
+        padding: const EdgeInsets.symmetric(vertical: 13),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Color(0xffdf8e33).withAlpha(100),
-                  offset: Offset(2, 4),
+                  color: const Color(0xffdf8e33).withAlpha(100),
+                  offset: const Offset(2, 4),
                   blurRadius: 8,
                   spreadRadius: 2)
             ],
             color: Colors.white),
-        child: Text(
+        child: const Text(
           'Login',
           style: TextStyle(
             fontSize: 20,
@@ -66,13 +66,13 @@ class _WelcomePageState extends State<WelcomePage> {
       },
       child: Container(
         width: getButtonSize(context),
-        padding: EdgeInsets.symmetric(vertical: 13),
+        padding: const EdgeInsets.symmetric(vertical: 13),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
           border: Border.all(color: Colors.white, width: 2),
         ),
-        child: Text(
+        child: const Text(
           'Register now',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
@@ -91,7 +91,7 @@ class _WelcomePageState extends State<WelcomePage> {
             fontWeight: FontWeight.w700,
             color: Colors.white,
           ),
-          children: [
+          children: const [
             TextSpan(
               text: 'base',
               style: TextStyle(color: Colors.white70, fontSize: 30),
@@ -159,19 +159,19 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: Colors.grey.shade200,
-                offset: Offset(2, 4),
+                offset: const Offset(2, 4),
                 blurRadius: 5,
                 spreadRadius: 2,
               )
             ],
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
@@ -187,11 +187,11 @@ class _WelcomePageState extends State<WelcomePage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               _title(),
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               _buttons(),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               _authorText(),

@@ -1,5 +1,5 @@
 import 'package:logger/logger.dart';
 
-Logger logger = new Logger(
+Logger logger = Logger(
   printer: PrettyPrinter(lineLength: 80),
 );

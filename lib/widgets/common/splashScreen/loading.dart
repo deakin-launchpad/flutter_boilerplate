@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {
   final String loadingText;
-  LoadingScreen(this.loadingText);
+  const LoadingScreen(this.loadingText);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class LoadingScreen extends StatelessWidget {
             ),
             Text(
               loadingText,
-              style: TextStyle(fontSize: 30, color: Colors.black87),
+              style: const TextStyle(fontSize: 30, color: Colors.black87),
             ),
           ],
         ),

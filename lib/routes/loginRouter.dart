@@ -14,8 +14,9 @@ class _LoginRouterState extends State<LoginRouter> {
     Provider.of<UserDataProvider>(context, listen: false)
         .accessTokenLogin()
         .then((value) {
-      if (value)
+      if (value) {
         Provider.of<UserDataProvider>(context, listen: false).getUserProfile();
+      }
     });
     super.initState();
   }
@@ -24,8 +25,8 @@ class _LoginRouterState extends State<LoginRouter> {
   Widget build(BuildContext context) {
     return Consumer<UserDataProvider>(
       builder: (context, userData, widget) {
-        if (userData.loginStatus == false) return WelcomePage();
-        if (userData.userProfile == null) return LoadingScreen('');
+        if (userData.loginStatus == false) return const WelcomePage();
+        if (userData.userProfile == null) return const LoadingScreen('');
         if (userData.userProfile!.firstLogin == false) return ChangePassword();
         return Home();
       },

@@ -3,13 +3,13 @@ import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
 class DevEnvironment extends StatelessWidget {
-  static final String route = '/dev';
+  static const String route = '/dev';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Developer Tools'),
+        title: const Text('Developer Tools'),
       ),
       body: ListView(
         children: [

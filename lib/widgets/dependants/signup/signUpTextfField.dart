@@ -7,7 +7,7 @@ class SignupTextField extends StatelessWidget {
   final Function? validator, onSaved, onSubmit;
   final FocusNode? focusNode;
   final bool? isPassword;
-  SignupTextField({
+  const SignupTextField({
     this.hint,
     this.label,
     this.action,
@@ -21,7 +21,7 @@ class SignupTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         onChanged: onSaved as void Function(String?)?,
         keyboardType: type,
@@ -33,7 +33,7 @@ class SignupTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: label,
           border: InputBorder.none,
-          fillColor: Color(0xfff3f3f4),
+          fillColor: const Color(0xfff3f3f4),
           filled: true,
         ),
       ),

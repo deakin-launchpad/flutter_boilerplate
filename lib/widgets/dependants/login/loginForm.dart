@@ -9,7 +9,7 @@ import '../../../models/models.dart';
 class LoginForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final double height;
-  LoginForm({
+  const LoginForm({
     required this.formKey,
     required this.height,
   });
@@ -35,16 +35,16 @@ class _LoginFormState extends State<LoginForm> {
     void Function(String?)? onSaved,
   }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -58,7 +58,7 @@ class _LoginFormState extends State<LoginForm> {
             decoration: InputDecoration(
               hintText: hintText,
               border: InputBorder.none,
-              fillColor: Color(0xfff3f3f4),
+              fillColor: const Color(0xfff3f3f4),
               filled: true,
             ),
           )
@@ -70,24 +70,24 @@ class _LoginFormState extends State<LoginForm> {
   Widget _loginButton(void Function()? onPressed) {
     return GestureDetector(
       onTap: onPressed,
-      child: new Container(
+      child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
+                  offset: const Offset(2, 4),
                   blurRadius: 5,
                   spreadRadius: 2)
             ],
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: Text(
+        child: const Text(
           'Login',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
@@ -152,7 +152,7 @@ class _LoginFormState extends State<LoginForm> {
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
-          children: [
+          children: const [
             TextSpan(
               text: 'base',
               style: TextStyle(color: Colors.black54, fontSize: 30),
@@ -167,9 +167,9 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _divider() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
-        children: <Widget>[
+        children: const <Widget>[
           SizedBox(
             width: 20,
           ),
@@ -204,12 +204,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushNamed(context, '/signup');
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
+        margin: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.all(15),
         alignment: Alignment.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: const <Widget>[
             Text(
               'Don\'t have an account ?',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
@@ -234,9 +234,9 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     void performLogin(
         Function assignToken, Function changeFirstLoginStatus) async {
-      if (widget.formKey.currentState == null)
+      if (widget.formKey.currentState == null) {
         debugPrint('emptyformkey');
-      else if (widget.formKey.currentState!.validate()) {
+      } else if (widget.formKey.currentState!.validate()) {
         widget.formKey.currentState!.save();
         DIOResponseBody response;
         if (_devModeSwitchValue) {
@@ -249,7 +249,7 @@ class _LoginFormState extends State<LoginForm> {
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            new SnackBar(
+            SnackBar(
               content: Text(response.data),
             ),
           );
@@ -265,9 +265,9 @@ class _LoginFormState extends State<LoginForm> {
         children: <Widget>[
           SizedBox(height: widget.height * .2),
           _title(),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           _emailPasswordWidget(),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Consumer<UserDataProvider>(
             builder: (_, data, __) => _loginButton(
               () {
@@ -282,9 +282,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             alignment: Alignment.centerRight,
-            child: Text('Forgot Password ?',
+            child: const Text('Forgot Password ?',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
           ),
           _divider(),

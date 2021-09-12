@@ -11,7 +11,7 @@ class Routes {
 
   Routes() {
     _router.notFoundHandler = Handler(handlerFunc: (context, params) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text('404'),
         ),
@@ -23,7 +23,7 @@ class Routes {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return '';
     var token = prefs.getString('accessToken');
-    return token == null ? '' : token;
+    return token ?? '';
   }
 
   Handler unAuthenticatedRoute(Widget screen) {
@@ -32,8 +32,9 @@ class Routes {
         return FutureBuilder(
           future: accessToken,
           builder: (context, tokenSnapshot) {
-            if (tokenSnapshot.connectionState == ConnectionState.waiting)
-              return LoadingScreen('');
+            if (tokenSnapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingScreen('');
+            }
             if (tokenSnapshot.data == '') return screen;
             return Home();
           },
@@ -48,9 +49,10 @@ class Routes {
         return FutureBuilder(
           future: accessToken,
           builder: (context, tokenSnapshot) {
-            if (tokenSnapshot.connectionState == ConnectionState.waiting)
-              return LoadingScreen('');
-            if (tokenSnapshot.data == '') return WelcomePage();
+            if (tokenSnapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingScreen('');
+            }
+            if (tokenSnapshot.data == '') return const WelcomePage();
             return screen;
           },
         );
@@ -66,7 +68,7 @@ class Routes {
   void configureRoutes() {
     _defineRoute(
       WelcomePage.route,
-      unAuthenticatedRoute(WelcomePage()),
+      unAuthenticatedRoute(const WelcomePage()),
     );
     _defineRoute(
       Login.route,

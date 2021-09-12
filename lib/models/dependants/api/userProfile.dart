@@ -26,32 +26,32 @@ class UserProfileAPIBody {
   });
 
   UserProfileAPIBody.fromJson(Map<String, dynamic> json) {
-    this.sId = json['_id'];
-    this.firstLogin = json['firstLogin'];
-    this.emailVerified = json['emailVerified'];
-    this.isBlocked = json['isBlocked'];
-    this.firstName = json['firstName'];
-    this.lastName = json['lastName'];
-    this.emailId = json['emailId'];
-    this.phoneNumber = json['phoneNumber'];
-    this.countryCode = json['countryCode'];
-    this.initialPassword = json['initialPassword'];
-    this.registrationDate = json['registrationDate'];
+    sId = json['_id'];
+    firstLogin = json['firstLogin'];
+    emailVerified = json['emailVerified'];
+    isBlocked = json['isBlocked'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    emailId = json['emailId'];
+    phoneNumber = json['phoneNumber'];
+    countryCode = json['countryCode'];
+    initialPassword = json['initialPassword'];
+    registrationDate = json['registrationDate'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['firstLogin'] = this.firstLogin;
-    data['emailVerified'] = this.emailVerified;
-    data['isBlocked'] = this.isBlocked;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['emailId'] = this.emailId;
-    data['phoneNumber'] = this.phoneNumber;
-    data['countryCode'] = this.countryCode;
-    data['initialPassword'] = this.initialPassword;
-    data['registrationDate'] = this.registrationDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['firstLogin'] = firstLogin;
+    data['emailVerified'] = emailVerified;
+    data['isBlocked'] = isBlocked;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['emailId'] = emailId;
+    data['phoneNumber'] = phoneNumber;
+    data['countryCode'] = countryCode;
+    data['initialPassword'] = initialPassword;
+    data['registrationDate'] = registrationDate;
     return data;
   }
 }

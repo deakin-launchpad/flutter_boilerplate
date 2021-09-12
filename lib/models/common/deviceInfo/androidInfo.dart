@@ -1,7 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
 class AndroidInfo {
-  DeviceInfoPlugin _plugin = new DeviceInfoPlugin();
+  final DeviceInfoPlugin _plugin = DeviceInfoPlugin();
   String uuid;
   AndroidInfo({required this.uuid});
   Future<Map<String, String>> get info async {

@@ -27,14 +27,15 @@ class Login extends StatelessWidget {
           Navigator.pop(context);
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-                child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
+                padding: const EdgeInsets.only(left: 0, top: 10, bottom: 10),
+                child:
+                    const Icon(Icons.keyboard_arrow_left, color: Colors.black),
               ),
-              Text('Back',
+              const Text('Back',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
             ],
           ),
@@ -43,7 +44,7 @@ class Login extends StatelessWidget {
     }
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: height,
         width: MediaQuery.of(context).size.width,
         child: Stack(
@@ -53,11 +54,11 @@ class Login extends StatelessWidget {
               Positioned(
                 top: -height * .15,
                 right: -MediaQuery.of(context).size.width * .4,
-                child: BezierContainer(),
+                child: const BezierContainer(),
               ),
             Container(
               width: getFormWidth(context),
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 child: LoginForm(
                   formKey: _formKey,

@@ -4,18 +4,18 @@ import 'package:flutter/cupertino.dart';
 import '../../providers/providers.dart';
 
 class Home extends StatelessWidget {
-  static final String route = '/home';
+  static const String route = '/home';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('User OnBoarding'),
+          title: const Text('User OnBoarding'),
           actions: <Widget>[
             GestureDetector(
                 onTap: () {},
                 child: Consumer<UserDataProvider>(
                     builder: (context, data, __) => TextButton(
-                          child: Text(
+                          child: const Text(
                             'Logout',
                             style: TextStyle(color: Colors.black),
                           ),
@@ -26,7 +26,7 @@ class Home extends StatelessWidget {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: Consumer<UserDataProvider>(
             builder: (_, data, __) => Center(
               child: Column(

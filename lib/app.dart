@@ -11,7 +11,7 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
-  Routes routerInstance = new Routes();
+  Routes routerInstance = Routes();
 
   @override
   void initState() {

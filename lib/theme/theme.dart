@@ -22,12 +22,12 @@ class ApplicationTheme {
       ),
       primaryColor: Colors.white,
       appBarTheme: AppBarTheme(
-        actionsIconTheme: IconThemeData(
+        actionsIconTheme: const IconThemeData(
           color: Colors.white,
         ),
         elevation: 1,
         color: Colors.white,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black,
         ),
         titleTextStyle: _googleTextTheme.headline6,

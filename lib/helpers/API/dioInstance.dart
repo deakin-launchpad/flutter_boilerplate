@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,14 +7,15 @@ import '../../constants/constants.dart';
 import "../../helpers/helpers.dart";
 
 class DioInstance {
-  final Dio _instance = new Dio();
+  final Dio _instance = Dio();
   final String _baseUrl = Constants.connectionConstants.backendUrl + '/api/';
   final int _connectionTimeout = 5000;
   final int _receiveTimeout = 3000;
 
   DioInstance() {
-    if (Constants.devBuild == true)
+    if (Constants.devBuild == true) {
       _instance.interceptors.add(LogInterceptor(responseBody: true));
+    }
     _instance.options.baseUrl = _baseUrl;
     logger.i('DIO instance Constructed\nBase Url: ' + _baseUrl.toString());
     _instance.options.connectTimeout = _connectionTimeout;
@@ -26,16 +28,20 @@ class DioInstance {
 
   DIOResponseBody errorHelper(dynamic onError) {
     logger.e(onError);
-    if (onError == null)
+    if (onError == null) {
       return DIOResponseBody(success: false, data: 'Network Error');
-    if (onError.response == null)
+    }
+    if (onError.response == null) {
       return DIOResponseBody(success: false, data: "Network Error");
-    if (onError.response == null)
+    }
+    if (onError.response == null) {
       return DIOResponseBody(
           success: false, data: 'Connection to Backend Failed');
-    if (onError.response.data["message"] != null)
+    }
+    if (onError.response.data["message"] != null) {
       return DIOResponseBody(
           success: false, data: onError.response.data["message"]);
+    }
     return DIOResponseBody(success: false, data: "Oops! Something went wrong!");
   }
 
@@ -43,6 +49,6 @@ class DioInstance {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return '';
     var token = prefs.getString('accessToken');
-    return token == null ? '' : token;
+    return token ?? '';
   }
 }

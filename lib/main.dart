@@ -11,14 +11,14 @@ void main() {
   // Necessary for locking the orientation.
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
-    runApp(new Application());
+    runApp(Application());
   } else {
     //Lock Orientation to Potrait Only
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
         .then((_) {
       debugPrint(
           "Locked Orientation to potrait only.\nNow launching application");
-      runApp(new Application());
+      runApp(Application());
     });
   }
 }
