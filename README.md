@@ -2,7 +2,7 @@
 
 A boilerplate project created in flutter. Boilerplate supports both web and mobile. VSCode is recommended in this project.
 
-Current Flutter Version : 2.5.0 
+Current Flutter Version : 2.5.3 
 
 ## Getting Started
 
