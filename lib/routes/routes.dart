@@ -61,7 +61,7 @@ class Routes {
   }
 
   void _defineRoute(String route, Handler handler,
-      {transitionType = TransitionType.fadeIn}) {
+      {transitionType = TransitionType.material}) {
     _router.define(route, handler: handler, transitionType: transitionType);
   }
 
