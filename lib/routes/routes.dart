@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_onboarding/helpers/helpers.dart';
 import 'package:user_onboarding/widgets/common/common.dart';
 
 import '../screens/screens.dart';
@@ -36,6 +37,7 @@ class Routes {
               return const LoadingScreen('');
             }
             if (tokenSnapshot.data == '') return screen;
+            logger.i(tokenSnapshot.data);
             return Home();
           },
         );
@@ -60,6 +62,15 @@ class Routes {
     );
   }
 
+  Handler confirmAccountRoute() {
+    return Handler(handlerFunc: (context, params) {
+      return ConfirmAccount(
+        email: params['email']![0],
+        password: params['password']![0],
+      );
+    });
+  }
+
   void _defineRoute(String route, Handler handler,
       {transitionType = TransitionType.material}) {
     _router.define(route, handler: handler, transitionType: transitionType);
@@ -77,6 +88,10 @@ class Routes {
     _defineRoute(
       SignUp.route,
       unAuthenticatedRoute(SignUp()),
+    );
+    _defineRoute(
+      ConfirmAccount.route,
+      confirmAccountRoute(),
     );
     _defineRoute(
       Home.route,

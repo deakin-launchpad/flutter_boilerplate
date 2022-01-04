@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../models/models.dart';
 import '../../../helpers/API/api.dart';
 import 'signUpTextfField.dart';
-import '../../../models/common/deviceInfo/deviceInfo.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -55,14 +54,32 @@ class _SignUpFormState extends State<SignUpForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           SignupTextField(
-            label: 'Name',
-            hint: 'John Doe',
+            label: 'First Name',
+            hint: 'John',
             action: TextInputAction.next,
             onSaved: (value) {
               signUpValues.firstname = value;
             },
             onSubmit: (_) {
               FocusScope.of(context).requestFocus(lastname);
+            },
+            type: TextInputType.text,
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter the first name';
+              }
+              return null;
+            },
+          ),
+          SignupTextField(
+            label: 'Last Name',
+            hint: 'Doe',
+            action: TextInputAction.next,
+            onSaved: (value) {
+              signUpValues.lastname = value;
+            },
+            onSubmit: (_) {
+              FocusScope.of(context).requestFocus(email);
             },
             type: TextInputType.text,
             validator: (value) {
@@ -137,7 +154,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SignupTextField(
             focusNode: number,
-            label: 'Number',
+            label: 'Phone Number',
             hint: '412345678',
             action: TextInputAction.done,
             type: TextInputType.number,
@@ -147,31 +164,32 @@ class _SignUpFormState extends State<SignUpForm> {
             onSubmit: (_) {},
             validator: (value) {
               if (value.isEmpty) {
-                return 'Please enter the number';
+                return 'Please enter the phone number';
               }
               return null;
             },
           ),
           _button(() async {
-            DeviceInfo _plugin = DeviceInfo();
-            DIOResponseBody response = await API().registerUser({
-              "firstName": signUpValues.firstname!.split(' ')[0].toString(),
-              "lastName": signUpValues.firstname!.split(' ').length == 1
-                  ? signUpValues.firstname!.split(' ')[0]
-                  : signUpValues.firstname!.split(' ')[1],
+            DIOResponseBody response = await API().amplifyRegisterUser({
               "emailId": signUpValues.email.toString(),
+              "password": signUpValues.password,
+              "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+              "lastName": signUpValues.lastname!.split(' ')[0].toString(),
               "phoneNumber": signUpValues.number.toString(),
               "countryCode": "+61",
-              "password": signUpValues.password,
-              "deviceData": await _plugin.info
             });
+
             if (response.success) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('User Registered'),
+                  content: Text(
+                      'Registered successfully. Please confirm to be signed in.'),
                 ),
               );
-              return Navigator.of(context).pop();
+              await Navigator.popAndPushNamed(
+                context,
+                '/confirm',
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

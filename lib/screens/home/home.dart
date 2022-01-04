@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 
 import '../../providers/providers.dart';
 
@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
                             style: TextStyle(color: Colors.black),
                           ),
                           onPressed: () {
-                            data.logout(context);
+                              data.logout(context);
                           },
                         )))
           ],

@@ -19,13 +19,19 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   bool _devModeSwitchValue = false;
+
+  bool _loading = false;
+  bool isPassword = false;
+
   final _passwordFocusNode = FocusNode();
   final _usernameFocusNode = FocusNode();
   final LoginAPIBody loginValues = LoginAPIBody();
 
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   Widget _textField(
     String title, {
-    bool isPassword = false,
     String? hintText,
     String? Function(String?)? validator,
     TextInputAction? textInputAction,
@@ -33,6 +39,8 @@ class _LoginFormState extends State<LoginForm> {
     FocusNode? focusNode,
     TextInputType? keyboardType,
     void Function(String?)? onSaved,
+    TextEditingController? controller,
+    bool isPasswordForm = false,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -48,19 +56,35 @@ class _LoginFormState extends State<LoginForm> {
             height: 10,
           ),
           TextFormField(
+            cursorColor: Colors.black,
             onSaved: onSaved,
+            controller: controller,
             keyboardType: keyboardType,
             focusNode: focusNode,
             onFieldSubmitted: onFieldSubmitted,
             validator: validator,
-            obscureText: isPassword,
+            obscureText: isPasswordForm ? !isPassword : false,
             textInputAction: textInputAction,
             decoration: InputDecoration(
-              hintText: hintText,
-              border: InputBorder.none,
-              fillColor: const Color(0xfff3f3f4),
-              filled: true,
-            ),
+                hintText: hintText,
+                border: InputBorder.none,
+                fillColor: const Color(0xfff3f3f4),
+                filled: true,
+                suffixIcon: isPasswordForm
+                    ? IconButton(
+                        icon: Icon(
+                          isPassword
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                        ),
+                        color: Colors.black,
+                        onPressed: () {
+                          setState(() {
+                            isPassword = !isPassword;
+                          });
+                        },
+                      )
+                    : null),
           )
         ],
       ),
@@ -69,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _loginButton(void Function()? onPressed) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: _loading ? null : onPressed,
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -87,10 +111,17 @@ class _LoginFormState extends State<LoginForm> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: const Text(
-          'Login',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
+        child: _loading
+            ? const CircularProgressIndicator.adaptive(
+                strokeWidth: 1.0,
+              )
+            : const Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }
@@ -101,37 +132,40 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  Widget _emailPasswordWidget() {
+  Widget _userCredentialsWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         _textField(
-          "Email id",
+          "Username or Email",
           focusNode: _usernameFocusNode,
           textInputAction: TextInputAction.next,
           onFieldSubmitted: (_) {
             FocusScope.of(context).requestFocus(_passwordFocusNode);
           },
-          hintText: 'JohnDoe@example.com',
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.text,
+          isPasswordForm: false,
+          //isPassword: false,
           onSaved: (value) {
             loginValues.username = value;
           },
+          controller: _usernameController,
           validator: (value) {
-            if (value!.isEmpty) return 'Please Enter the Email';
-            if (!TextHelper().validateEmail(value)) return 'Enter Valid Email';
+            if (value!.isEmpty) return 'Please enter the username';
             return null;
           },
         ),
         _textField(
           "Password",
-          isPassword: true,
+          //isPassword: true,
           focusNode: _passwordFocusNode,
           textInputAction: TextInputAction.done,
           keyboardType: TextInputType.visiblePassword,
           onSaved: (value) {
             loginValues.password = value;
           },
+          isPasswordForm: true,
+          controller: _passwordController,
           validator: (value) {
             if (value!.isEmpty) return 'Please enter the password';
             return null;
@@ -232,27 +266,41 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    void performLogin(
-        Function assignToken, Function changeFirstLoginStatus) async {
+    void performLogin() async {
       if (widget.formKey.currentState == null) {
         debugPrint('emptyformkey');
       } else if (widget.formKey.currentState!.validate()) {
         widget.formKey.currentState!.save();
+        setState(() {
+          _loading = true;
+        });
         DIOResponseBody response;
         if (_devModeSwitchValue) {
-          response = await API().userLogin(Constants.devUser);
+          response = await API().amplifyUserLogin(Constants.devUser);
         } else {
-          response = await API().userLogin(loginValues);
+          response = await API().amplifyUserLogin(loginValues);
         }
         if (response.success) {
-          assignToken(response.data['accessToken']);
+          setState(() {
+            _loading = false;
+          });
+          Provider.of<UserDataProvider>(context, listen: false).refresh();
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(response.data),
-            ),
-          );
+          setState(() {
+            _loading = false;
+          });
+
+          if (response.data == AMPLIFY_EXCEPTION.UserNotConfirmedException) {
+            Navigator.pushNamed(context,
+                '/confirm/${loginValues.username}/${loginValues.password}');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(response.data.message),
+              ),
+            );
+          }
         }
       }
     }
@@ -266,7 +314,7 @@ class _LoginFormState extends State<LoginForm> {
           SizedBox(height: widget.height * .2),
           _title(),
           const SizedBox(height: 50),
-          _emailPasswordWidget(),
+          _userCredentialsWidget(),
           const SizedBox(height: 20),
           Consumer<UserDataProvider>(
             builder: (_, data, __) => _loginButton(
@@ -276,8 +324,7 @@ class _LoginFormState extends State<LoginForm> {
                   Navigator.of(context).pushReplacementNamed('/home');
                   return;
                 }
-                performLogin(
-                    data.assignAccessToken, data.changeFirstLoginStatus);
+                performLogin();
               },
             ),
           ),
