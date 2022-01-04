@@ -28,6 +28,11 @@ class API {
               options: CognitoSignInOptions(clientMetadata: {}))
           as CognitoSignInResult;
 
+      // Check api data returned.
+      // logger.i("Step: ", _loginResult.nextStep!.signInStep);
+      // logger.i("Additional Info", _loginResult.nextStep!.additionalInfo);
+      // logger.i("Code Deli Details", _loginResult.nextStep!.codeDeliveryDetails);
+
       if (_loginResult.isSignedIn) {
         return DIOResponseBody(success: true);
       } else {
@@ -35,10 +40,8 @@ class API {
       }
     } on NotAuthorizedException catch (err) {
       logger.e(err);
-      return DIOResponseBody(
-          success: false, data: AMPLIFY_EXCEPTION.NotAuthorizedException);
-    } on UserNotConfirmedException catch (err) {
-      logger.e(err);
+      return DIOResponseBody(success: false, data: err);
+    } on UserNotConfirmedException {
       return DIOResponseBody(
           success: false, data: AMPLIFY_EXCEPTION.UserNotConfirmedException);
     } catch (err) {

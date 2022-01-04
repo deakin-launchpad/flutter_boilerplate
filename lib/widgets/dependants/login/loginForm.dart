@@ -295,9 +295,14 @@ class _LoginFormState extends State<LoginForm> {
             Navigator.pushNamed(context,
                 '/confirm/${loginValues.username}/${loginValues.password}');
           } else {
+            final String errMessage = response.data.underlyingException
+                .toString()
+                .split(':')[1]
+                .split('.')[0]
+                .trim();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(response.data.message),
+                content: Text(errMessage),
               ),
             );
           }
