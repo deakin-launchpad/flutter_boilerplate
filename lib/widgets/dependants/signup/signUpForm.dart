@@ -9,7 +9,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final _signUpFormKey = GlobalKey<FormState>();
+  static final _signUpFormKey = GlobalKey<FormState>();
   final SignUpValues signUpValues = SignUpValues();
   final lastname = FocusNode();
   final email = FocusNode();
@@ -65,7 +65,7 @@ class _SignUpFormState extends State<SignUpForm> {
             },
             type: TextInputType.text,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter the first name';
               }
               return null;
@@ -83,7 +83,7 @@ class _SignUpFormState extends State<SignUpForm> {
             },
             type: TextInputType.text,
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter the first name';
               }
               return null;
@@ -102,7 +102,7 @@ class _SignUpFormState extends State<SignUpForm> {
               FocusScope.of(context).requestFocus(password);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter the email';
               }
               Pattern emailPattern =
@@ -126,7 +126,7 @@ class _SignUpFormState extends State<SignUpForm> {
               FocusScope.of(context).requestFocus(cpassword);
             },
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter the password';
               }
               return null;
@@ -143,9 +143,6 @@ class _SignUpFormState extends State<SignUpForm> {
               FocusScope.of(context).requestFocus(number);
             },
             validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter the confirmation password';
-              }
               if (value != signUpValues.password) {
                 return 'Passwords don\'t match';
               }
@@ -163,39 +160,42 @@ class _SignUpFormState extends State<SignUpForm> {
             },
             onSubmit: (_) {},
             validator: (value) {
-              if (value.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter the phone number';
               }
               return null;
             },
           ),
           _button(() async {
-            DIOResponseBody response = await API().amplifyRegisterUser({
-              "emailId": signUpValues.email.toString(),
-              "password": signUpValues.password,
-              "firstName": signUpValues.firstname!.split(' ')[0].toString(),
-              "lastName": signUpValues.lastname!.split(' ')[0].toString(),
-              "phoneNumber": signUpValues.number.toString(),
-              "countryCode": "+61",
-            });
+            if (_signUpFormKey.currentState == null) {
+              debugPrint('emptyformKey');
+            } else if (_signUpFormKey.currentState!.validate()) {
+              _signUpFormKey.currentState!.save();
+              DIOResponseBody response = await API().amplifyRegisterUser({
+                "emailId": signUpValues.email.toString(),
+                "password": signUpValues.password,
+                "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+                "lastName": signUpValues.lastname!.split(' ')[0].toString(),
+                "phoneNumber": signUpValues.number.toString(),
+                "countryCode": "+61",
+              });
 
-            if (response.success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                      'Registered successfully. Please confirm to be signed in.'),
-                ),
-              );
-              await Navigator.popAndPushNamed(
-                context,
-                '/confirm',
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(response.data),
-                ),
-              );
+              if (response.success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                        'Registered successfully. Please confirm to be signed in.'),
+                  ),
+                );
+                Navigator.pushNamed(context,
+                    '/confirm/${signUpValues.email}/${signUpValues.password}');
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(response.data),
+                  ),
+                );
+              }
             }
           }, 'SignUp'),
         ],
