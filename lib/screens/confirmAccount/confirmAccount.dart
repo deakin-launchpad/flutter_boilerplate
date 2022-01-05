@@ -6,6 +6,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../constants/constants.dart';
 import '../../models/models.dart';
 import '../../helpers/helpers.dart';
+import '../../providers/providers.dart';
 
 class ConfirmAccount extends StatefulWidget {
   static const String route = '/confirm/:email/:password';
@@ -240,6 +241,10 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                             setState(() {
                               _loading = false;
                             });
+                            Provider.of<UserDataProvider>(context,
+                                    listen: false)
+                                .refresh();
+
                             return Navigator.of(context)
                                 .popUntil((route) => route.isFirst);
                           }

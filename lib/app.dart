@@ -17,11 +17,10 @@ class Application extends StatefulWidget {
 
 class _ApplicationState extends State<Application> {
   Routes routerInstance = Routes();
-  bool _check = false;
+  bool _amplifyConfigured = false;
 
   Future<void> _configureAmplify() async {
     Constants _constants = Constants();
-
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
       await Amplify.configure(_constants.amplifyConfiguration);
@@ -30,7 +29,7 @@ class _ApplicationState extends State<Application> {
     } finally {
       if (Amplify.isConfigured) {
         setState(() {
-          _check = true;
+          _amplifyConfigured = true;
         });
       }
     }
@@ -39,8 +38,8 @@ class _ApplicationState extends State<Application> {
   @override
   void initState() {
     super.initState();
-    routerInstance.configureRoutes();
     _configureAmplify();
+    routerInstance.configureRoutes();
   }
 
   @override
@@ -53,7 +52,9 @@ class _ApplicationState extends State<Application> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: Constants.debugBanner,
-        home: _check ? LoginRouter() : const LoadingScreen("Configuring..."),
+        home: _amplifyConfigured
+            ? LoginRouter()
+            : const LoadingScreen("Configuring..."),
         title: Constants.applicationConstants.title,
         theme: ApplicationTheme(context).getAppTheme,
         onGenerateRoute: routerInstance.router.generator,

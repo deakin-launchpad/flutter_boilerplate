@@ -112,9 +112,7 @@ class _LoginFormState extends State<LoginForm> {
                 end: Alignment.centerRight,
                 colors: [Color(0xfffbb448), Color(0xfff7892b)])),
         child: _loading
-            ? const CircularProgressIndicator.adaptive(
-                strokeWidth: 1.0,
-              )
+            ? const CircularProgressIndicator.adaptive()
             : const Text(
                 'Login',
                 style: TextStyle(
@@ -285,27 +283,27 @@ class _LoginFormState extends State<LoginForm> {
             _loading = false;
           });
           Provider.of<UserDataProvider>(context, listen: false).refresh();
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        } else {
-          setState(() {
-            _loading = false;
-          });
+          return Navigator.of(context).popUntil((route) => route.isFirst);
+        }
 
-          if (response.data == AMPLIFY_EXCEPTION.UserNotConfirmedException) {
-            Navigator.pushNamed(context,
-                '/confirm/${loginValues.username}/${loginValues.password}');
-          } else {
-            final String errMessage = response.data.underlyingException
-                .toString()
-                .split(':')[1]
-                .split('.')[0]
-                .trim();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(errMessage),
-              ),
-            );
-          }
+        setState(() {
+          _loading = false;
+        });
+
+        if (response.data == AMPLIFY_EXCEPTION.UserNotConfirmedException) {
+          Navigator.pushNamed(context,
+              '/confirm/${loginValues.username}/${loginValues.password}');
+        } else {
+          final String errMessage = response.data.underlyingException
+              .toString()
+              .split(':')[1]
+              .split('.')[0]
+              .trim();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errMessage),
+            ),
+          );
         }
       }
     }

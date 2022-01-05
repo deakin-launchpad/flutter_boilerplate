@@ -60,7 +60,6 @@ class _LoginRouterState extends State<LoginRouter> {
             if (!status.hasData) {
               return const WelcomePage();
             }
-            logger.i("Token assigned: ", status.data);
             if (status.data == false) {
               return const WelcomePage();
             }
