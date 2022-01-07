@@ -3,3 +3,4 @@ export 'SQLite/SQLite.dart';
 export 'Logger/logger.dart';
 export 'TextHelper/TextHelper.dart';
 export 'Layout/LayoutHelper.dart';
+export 'Auth/auth.dart';

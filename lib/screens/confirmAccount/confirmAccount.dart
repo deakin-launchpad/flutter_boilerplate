@@ -226,7 +226,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                         setState(() {
                           _loading = true;
                         });
-                        DIOResponseBody confirmResponse = await API()
+                        DIOResponseBody confirmResponse = await AmplifyAuth()
                             .amplifyConfirmSignUp(widget.email!, currentText);
 
                         if (confirmResponse.success) {
@@ -235,7 +235,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                               password: widget.password!);
 
                           DIOResponseBody loginResponse =
-                              await API().amplifyUserLogin(userCreds);
+                              await AmplifyAuth().amplifyUserLogin(userCreds);
 
                           if (loginResponse.success) {
                             setState(() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../models/models.dart';
-import '../../../helpers/API/api.dart';
+import '../../../helpers/helpers.dart';
 import 'signUpTextfField.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -171,7 +171,8 @@ class _SignUpFormState extends State<SignUpForm> {
               debugPrint('emptyformKey');
             } else if (_signUpFormKey.currentState!.validate()) {
               _signUpFormKey.currentState!.save();
-              DIOResponseBody response = await API().amplifyRegisterUser({
+              DIOResponseBody response =
+                  await AmplifyAuth().amplifyRegisterUser({
                 "emailId": signUpValues.email.toString(),
                 "password": signUpValues.password,
                 "firstName": signUpValues.firstname!.split(' ')[0].toString(),

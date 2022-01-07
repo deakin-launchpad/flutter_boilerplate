@@ -274,16 +274,17 @@ class _LoginFormState extends State<LoginForm> {
         });
         DIOResponseBody response;
         if (_devModeSwitchValue) {
-          response = await API().amplifyUserLogin(Constants.devUser);
+          response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
         } else {
-          response = await API().amplifyUserLogin(loginValues);
+          response = await AmplifyAuth().amplifyUserLogin(loginValues);
         }
-        if (response.success) {
+        if (response.success && response.data) {
           setState(() {
             _loading = false;
           });
           Provider.of<UserDataProvider>(context, listen: false).refresh();
           return Navigator.of(context).popUntil((route) => route.isFirst);
+          // return;
         }
 
         setState(() {
