@@ -9,6 +9,7 @@ import 'routes/routes.dart';
 import 'theme/theme.dart';
 import 'helpers/helpers.dart';
 import 'widgets/widgets.dart';
+import 'screens/screens.dart';
 
 class Application extends StatefulWidget {
   @override
@@ -53,10 +54,11 @@ class _ApplicationState extends State<Application> {
       child: MaterialApp(
         debugShowCheckedModeBanner: Constants.debugBanner,
         home: _amplifyConfigured
-            ? LoginRouter()
+            ? const WelcomePage()
             : const LoadingScreen("Configuring..."),
         title: Constants.applicationConstants.title,
         theme: ApplicationTheme(context).getAppTheme,
+        initialRoute: '/',
         onGenerateRoute: routerInstance.router.generator,
       ),
     );

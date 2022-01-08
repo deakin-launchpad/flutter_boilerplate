@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_onboarding/helpers/helpers.dart';
-import 'package:user_onboarding/widgets/common/common.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 
+import '../helpers/helpers.dart';
+import '../widgets/widgets.dart';
 import '../screens/screens.dart';
-export './loginRouter.dart';
 
 class Routes {
   static final FluroRouter _router = FluroRouter();
@@ -22,7 +23,26 @@ class Routes {
 
   Future<String> get accessToken async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('accessToken')) return '';
+    if (!prefs.containsKey('accessToken')) {
+      try {
+        AuthSession _session = await Amplify.Auth.fetchAuthSession(
+            options: CognitoSessionOptions(getAWSCredentials: true));
+        if (_session.isSignedIn == false) {
+          return '';
+        }
+
+        CognitoAuthSession _authSession = (_session as CognitoAuthSession);
+        AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
+
+        if (_userToken == null) {
+          return '';
+        }
+
+        prefs.setString('accessToken', _userToken.idToken);
+      } catch (e) {
+        return '';
+      }
+    }
     var token = prefs.getString('accessToken');
     return token ?? '';
   }
