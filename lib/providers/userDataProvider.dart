@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/models.dart';
 import '../helpers/helpers.dart';
+import '../constants/constants.dart';
 
 class UserDataProvider with ChangeNotifier {
   String? _accessToken;
@@ -15,7 +16,9 @@ class UserDataProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return false;
     var localToken = prefs.getString('accessToken')!;
-    DIOResponseBody response = await AmplifyAuth().accessTokenLogin(localToken);
+    DIOResponseBody response = Constants.amplifyEnabled
+        ? await AmplifyAuth().accessTokenLogin(localToken)
+        : await API().accessTokenLogin(localToken);
     if (response.success) {
       _userLoggedIn = true;
       _accessToken = localToken;
@@ -69,12 +72,25 @@ class UserDataProvider with ChangeNotifier {
 
   /// log user out
   void logout(BuildContext context) async {
-    await AmplifyAuth().logout();
-    _userLoggedIn = false;
-    _accessToken = null;
-    final prefs = await SharedPreferences.getInstance();
-    if (await prefs.clear()) {
-      Navigator.popUntil(context, (route) => route.isFirst);
+    if (Constants.amplifyEnabled) {
+      await AmplifyAuth().logout();
+      _userLoggedIn = false;
+      _accessToken = null;
+      final prefs = await SharedPreferences.getInstance();
+      if (await prefs.clear()) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }
+    } else {
+      bool response = await API().logout(_accessToken!);
+      if (response || accessToken == null) {
+        _userLoggedIn = false;
+        notifyListeners();
+        _accessToken = null;
+        final prefs = await SharedPreferences.getInstance();
+        prefs.clear();
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/welcome', (route) => route.isFirst);
+      }
     }
   }
 

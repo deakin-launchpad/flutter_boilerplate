@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
+import '../constants/constants.dart';
 import '../helpers/helpers.dart';
 import '../widgets/widgets.dart';
 import '../screens/screens.dart';
@@ -24,6 +25,7 @@ class Routes {
   Future<String> get accessToken async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) {
+      if (!Constants.amplifyEnabled) return '';
       try {
         AuthSession _session = await Amplify.Auth.fetchAuthSession(
             options: CognitoSessionOptions(getAWSCredentials: true));

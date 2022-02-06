@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
 
 import '../../providers/providers.dart';
 
 class Home extends StatelessWidget {
   static const String route = '/home';
-  FlutterAppAuth appAuth = FlutterAppAuth();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +37,7 @@ class Home extends StatelessWidget {
                           : 'Empty',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        // AuthorizationRequest request = AuthorizationRequest(clientId, redirectUrl)
-                        // appAuth.authorize(request);
-                      },
-                      child: const Text("OAuth 2.0"))
+                  )
                 ],
               ),
             ),

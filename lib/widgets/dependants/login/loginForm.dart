@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 import '../../../constants/constants.dart';
 import '../../../helpers/helpers.dart';
@@ -264,6 +264,80 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  void _regularLogin(DIOResponseBody response, Function assignToken) async {
+    if (response.success) {
+      assignToken(response.data['accessToken']);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.data),
+        ),
+      );
+    }
+  }
+
+  void _amplifyLogin(DIOResponseBody response, Function assignToken) async {
+    if (_devModeSwitchValue) {
+      response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
+    } else {
+      response = await AmplifyAuth().amplifyUserLogin(loginValues);
+    }
+
+    if (response.success && response.data) {
+      setState(() {
+        _loading = false;
+      });
+      AuthSession _session = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+      if (_session.isSignedIn == false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Login failed"),
+          ),
+        );
+        return;
+      }
+
+      CognitoAuthSession _authSession = (_session as CognitoAuthSession);
+      AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
+
+      if (_userToken == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Fail to fetch user"),
+          ),
+        );
+        return;
+      }
+
+      assignToken(_userToken.idToken);
+      Navigator.of(context).pushReplacementNamed('/home');
+    } else {
+      setState(() {
+        _loading = false;
+      });
+
+      if (response.data == AMPLIFY_EXCEPTION.UserNotConfirmedException) {
+        Navigator.pushReplacementNamed(context,
+            '/confirm/${loginValues.username}/${loginValues.password}');
+      } else {
+        final String errMessage = response.data.underlyingException != null
+            ? response.data.underlyingException
+                .toString()
+                .split(':')[1]
+                .split('.')[0]
+                .trim()
+            : response.data.message;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errMessage),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     void performLogin(
@@ -276,62 +350,21 @@ class _LoginFormState extends State<LoginForm> {
           _loading = true;
         });
         DIOResponseBody response;
-        if (_devModeSwitchValue) {
-          response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
-        } else {
-          response = await AmplifyAuth().amplifyUserLogin(loginValues);
-        }
-        if (response.success && response.data) {
-          setState(() {
-            _loading = false;
-          });
-          AuthSession _session = await Amplify.Auth.fetchAuthSession(
-              options: CognitoSessionOptions(getAWSCredentials: true));
-          if (_session.isSignedIn == false) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Login failed"),
-              ),
-            );
-            return;
-          }
 
-          CognitoAuthSession _authSession = (_session as CognitoAuthSession);
-          AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
-
-          if (_userToken == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Fail to fetch user"),
-              ),
-            );
-            return;
-          }
-
-          assignToken(_userToken.idToken);
-          Navigator.of(context).pushReplacementNamed('/home');
-        } else {
-          setState(() {
-            _loading = false;
-          });
-
-          if (response.data == AMPLIFY_EXCEPTION.UserNotConfirmedException) {
-            Navigator.pushReplacementNamed(context,
-                '/confirm/${loginValues.username}/${loginValues.password}');
+        if (Constants.amplifyEnabled) {
+          if (_devModeSwitchValue) {
+            response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
           } else {
-            final String errMessage = response.data.underlyingException != null
-                ? response.data.underlyingException
-                    .toString()
-                    .split(':')[1]
-                    .split('.')[0]
-                    .trim()
-                : response.data.message;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(errMessage),
-              ),
-            );
+            response = await AmplifyAuth().amplifyUserLogin(loginValues);
           }
+          _amplifyLogin(response, assignToken);
+        } else {
+          if (_devModeSwitchValue) {
+            response = await API().userLogin(Constants.devUser);
+          } else {
+            response = await API().userLogin(loginValues);
+          }
+          _regularLogin(response, assignToken);
         }
       }
     }

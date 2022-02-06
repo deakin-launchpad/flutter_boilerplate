@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 
 import 'providers/providers.dart';
 import 'constants/constants.dart';
@@ -22,9 +22,11 @@ class _ApplicationState extends State<Application> {
 
   Future<void> _configureAmplify() async {
     Constants _constants = Constants();
+    if (_constants.amplifyConfiguration == null) return;
+
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
-      await Amplify.configure(_constants.amplifyConfiguration);
+      await Amplify.configure(_constants.amplifyConfiguration!);
     } catch (error) {
       logger.wtf(error.toString());
     } finally {
@@ -39,7 +41,9 @@ class _ApplicationState extends State<Application> {
   @override
   void initState() {
     super.initState();
-    _configureAmplify();
+    if (Constants.amplifyEnabled) {
+      _configureAmplify();
+    }
     routerInstance.configureRoutes();
   }
 

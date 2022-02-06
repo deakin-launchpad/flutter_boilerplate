@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_onboarding/constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../helpers/helpers.dart';
 import 'signUpTextfField.dart';
@@ -44,6 +45,64 @@ class _SignUpFormState extends State<SignUpForm> {
         ),
       ),
     );
+  }
+
+  void _amplifyRegister() async {
+    DIOResponseBody response = await AmplifyAuth().amplifyRegisterUser({
+      "emailId": signUpValues.email.toString(),
+      "password": signUpValues.password,
+      "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+      "lastName": signUpValues.lastname!.split(' ')[0].toString(),
+      "phoneNumber": signUpValues.number.toString(),
+      "countryCode": "+61",
+    });
+
+    if (response.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('Registered successfully. Please confirm to be signed in.'),
+        ),
+      );
+      Navigator.pushNamed(
+          context, '/confirm/${signUpValues.email}/${signUpValues.password}');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.data),
+        ),
+      );
+    }
+  }
+
+  void _regularRegister() async {
+    DeviceInfo _plugin = DeviceInfo();
+
+    DIOResponseBody response = await API().registerUser({
+      "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+      "lastName": signUpValues.firstname!.split(' ').length == 1
+          ? signUpValues.firstname!.split(' ')[0]
+          : signUpValues.firstname!.split(' ')[1],
+      "emailId": signUpValues.email.toString(),
+      "phoneNumber": signUpValues.number.toString(),
+      "countryCode": "+61",
+      "password": signUpValues.password,
+      "deviceData": await _plugin.info
+    });
+    if (response.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('User Registered'),
+        ),
+      );
+      return Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.data),
+        ),
+      );
+    }
   }
 
   @override
@@ -171,31 +230,10 @@ class _SignUpFormState extends State<SignUpForm> {
               debugPrint('emptyformKey');
             } else if (_signUpFormKey.currentState!.validate()) {
               _signUpFormKey.currentState!.save();
-              DIOResponseBody response =
-                  await AmplifyAuth().amplifyRegisterUser({
-                "emailId": signUpValues.email.toString(),
-                "password": signUpValues.password,
-                "firstName": signUpValues.firstname!.split(' ')[0].toString(),
-                "lastName": signUpValues.lastname!.split(' ')[0].toString(),
-                "phoneNumber": signUpValues.number.toString(),
-                "countryCode": "+61",
-              });
-
-              if (response.success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                        'Registered successfully. Please confirm to be signed in.'),
-                  ),
-                );
-                Navigator.pushNamed(context,
-                    '/confirm/${signUpValues.email}/${signUpValues.password}');
+              if (Constants.amplifyEnabled) {
+                _amplifyRegister();
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(response.data),
-                  ),
-                );
+                _regularRegister();
               }
             }
           }, 'SignUp'),
