@@ -57,9 +57,11 @@ class _ApplicationState extends State<Application> {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: Constants.debugBanner,
-        home: _amplifyConfigured
-            ? const WelcomePage()
-            : const LoadingScreen("Configuring..."),
+        home: Constants.amplifyEnabled
+            ? _amplifyConfigured
+                ? const WelcomePage()
+                : const LoadingScreen("Configuring Amplify...")
+            : const WelcomePage(),
         title: Constants.applicationConstants.title,
         theme: ApplicationTheme(context).getAppTheme,
         initialRoute: '/',

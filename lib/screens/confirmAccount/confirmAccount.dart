@@ -246,7 +246,7 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                           setState(() {
                             _loading = false;
                           });
-                          return snackBar(loginResponse.data);
+                          // return snackBar(loginResponse.data);
                         }
                         // conditions for validating
                         if (currentText.length != 6 ||

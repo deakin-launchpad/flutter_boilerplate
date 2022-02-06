@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../helpers/helpers.dart';
 import '../../providers/providers.dart';
 
 class Home extends StatelessWidget {
@@ -26,14 +27,15 @@ class Home extends StatelessWidget {
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Consumer<UserDataProvider>(
-            builder: (_, data, __) => Center(
+          child: FutureBuilder(
+            future: SharedPrefHelper.accessToken,
+            builder: (_, AsyncSnapshot<String?> accessToken) => Center(
               child: Column(
                 children: <Widget>[
                   Flexible(
                     child: Text(
-                      data.accessToken != null
-                          ? 'accessToken: ${data.accessToken}'
+                      accessToken.data != null
+                          ? 'accessToken: ${accessToken.data}'
                           : 'Empty',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),

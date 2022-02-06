@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:user_onboarding/constants/constants.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+
+import '../../../constants/constants.dart';
 import '../../../models/models.dart';
 import '../../../helpers/helpers.dart';
 import 'signUpTextfField.dart';
@@ -47,35 +49,44 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  void _amplifyRegister() async {
-    DIOResponseBody response = await AmplifyAuth().amplifyRegisterUser({
-      "emailId": signUpValues.email.toString(),
-      "password": signUpValues.password,
-      "firstName": signUpValues.firstname!.split(' ')[0].toString(),
-      "lastName": signUpValues.lastname!.split(' ')[0].toString(),
-      "phoneNumber": signUpValues.number.toString(),
-      "countryCode": "+61",
-    });
+  void _amplifyRegister(BuildContext context) async {
+    try {
+      DIOResponseBody response = await AmplifyAuth().amplifyRegisterUser({
+        "emailId": signUpValues.email.toString(),
+        "password": signUpValues.password,
+        "firstName": signUpValues.firstname!.split(' ')[0].toString(),
+        "lastName": signUpValues.lastname!.split(' ')[0].toString(),
+        "phoneNumber": signUpValues.number.toString(),
+        "countryCode": "+61",
+      });
 
-    if (response.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Registered successfully. Please confirm to be signed in.'),
-        ),
-      );
-      Navigator.pushNamed(
-          context, '/confirm/${signUpValues.email}/${signUpValues.password}');
-    } else {
+      if (response.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Registered successfully. Please confirm to be signed in.'),
+          ),
+        );
+        Navigator.pushNamed(
+            context, '/confirm/${signUpValues.email}/${signUpValues.password}');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.data),
+          ),
+        );
+      }
+    } on UsernameExistsException catch (err) {
+      logger.e(err.message);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(response.data),
+          content: Text(err.message),
         ),
       );
     }
   }
 
-  void _regularRegister() async {
+  void _regularRegister(BuildContext context) async {
     DeviceInfo _plugin = DeviceInfo();
 
     DIOResponseBody response = await API().registerUser({
@@ -231,9 +242,9 @@ class _SignUpFormState extends State<SignUpForm> {
             } else if (_signUpFormKey.currentState!.validate()) {
               _signUpFormKey.currentState!.save();
               if (Constants.amplifyEnabled) {
-                _amplifyRegister();
+                _amplifyRegister(context);
               } else {
-                _regularRegister();
+                _regularRegister(context);
               }
             }
           }, 'SignUp'),
