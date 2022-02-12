@@ -277,41 +277,12 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _amplifyLogin(DIOResponseBody response, Function assignToken) async {
-    if (_devModeSwitchValue) {
-      response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
-    } else {
-      response = await AmplifyAuth().amplifyUserLogin(loginValues);
-    }
-
+  void _amplifyLogin(DIOResponseBody response) async {
     if (response.success && response.data) {
       setState(() {
         _loading = false;
       });
-      AuthSession _session = await Amplify.Auth.fetchAuthSession(
-          options: CognitoSessionOptions(getAWSCredentials: true));
-      if (_session.isSignedIn == false) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Login failed"),
-          ),
-        );
-        return;
-      }
 
-      CognitoAuthSession _authSession = (_session as CognitoAuthSession);
-      AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
-
-      if (_userToken == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Fail to fetch user"),
-          ),
-        );
-        return;
-      }
-
-      assignToken(_userToken.idToken);
       Navigator.of(context).pushReplacementNamed('/home');
     } else {
       setState(() {
@@ -353,11 +324,11 @@ class _LoginFormState extends State<LoginForm> {
 
         if (Constants.amplifyEnabled) {
           if (_devModeSwitchValue) {
-            response = await AmplifyAuth().amplifyUserLogin(Constants.devUser);
+            response = await AmplifyAuth.amplifyUserLogin(Constants.devUser);
           } else {
-            response = await AmplifyAuth().amplifyUserLogin(loginValues);
+            response = await AmplifyAuth.amplifyUserLogin(loginValues);
           }
-          _amplifyLogin(response, assignToken);
+          _amplifyLogin(response);
         } else {
           if (_devModeSwitchValue) {
             response = await API().userLogin(Constants.devUser);

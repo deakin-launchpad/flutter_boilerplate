@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 
 import '../constants/constants.dart';
 import '../helpers/helpers.dart';
@@ -24,28 +22,8 @@ class Routes {
 
   Future<String> get accessToken async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('accessToken')) {
-      if (!Constants.amplifyEnabled) return '';
-      try {
-        AuthSession _session = await Amplify.Auth.fetchAuthSession(
-            options: CognitoSessionOptions(getAWSCredentials: true));
-        if (_session.isSignedIn == false) {
-          return '';
-        }
-
-        CognitoAuthSession _authSession = (_session as CognitoAuthSession);
-        AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
-
-        if (_userToken == null) {
-          return '';
-        }
-
-        prefs.setString('accessToken', _userToken.idToken);
-      } catch (e) {
-        return '';
-      }
-    }
-    var token = prefs.getString('accessToken');
+    if (!prefs.containsKey('accessToken')) return '';
+    String? token = prefs.getString('accessToken');
     return token ?? '';
   }
 
@@ -53,7 +31,8 @@ class Routes {
     return Handler(
       handlerFunc: (context, params) {
         return FutureBuilder(
-          future: accessToken,
+          future:
+              Constants.amplifyEnabled ? AmplifyAuth.accessToken : accessToken,
           builder: (context, tokenSnapshot) {
             if (tokenSnapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen('');
@@ -71,7 +50,8 @@ class Routes {
     return Handler(
       handlerFunc: (context, params) {
         return FutureBuilder(
-          future: accessToken,
+          future:
+              Constants.amplifyEnabled ? AmplifyAuth.accessToken : accessToken,
           builder: (context, tokenSnapshot) {
             if (tokenSnapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen('');

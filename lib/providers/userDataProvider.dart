@@ -17,7 +17,7 @@ class UserDataProvider with ChangeNotifier {
     if (!prefs.containsKey('accessToken')) return false;
     var localToken = prefs.getString('accessToken')!;
     DIOResponseBody response = Constants.amplifyEnabled
-        ? await AmplifyAuth().accessTokenLogin(localToken)
+        ? await AmplifyAuth.accessTokenLogin(localToken)
         : await API().accessTokenLogin(localToken);
     if (response.success) {
       _userLoggedIn = true;
@@ -73,7 +73,7 @@ class UserDataProvider with ChangeNotifier {
   /// log user out
   void logout(BuildContext context) async {
     if (Constants.amplifyEnabled) {
-      await AmplifyAuth().logout();
+      await AmplifyAuth.logout();
       _userLoggedIn = false;
       _accessToken = null;
       final prefs = await SharedPreferences.getInstance();

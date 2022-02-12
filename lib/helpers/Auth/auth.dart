@@ -17,7 +17,39 @@ class AmplifyAuth {
     return auth;
   }
 
-  Future<DIOResponseBody> amplifyUserLogin(LoginAPIBody details) async {
+  static Future<bool> get loginStatus async {
+    try {
+      AuthSession _session = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+      logger.i("Auth isLoggedIn: ${_session.isSignedIn}");
+      return _session.isSignedIn;
+    } catch (e) {
+      logger.e(e);
+      return false;
+    }
+  }
+
+  static Future<String?> get accessToken async {
+    try {
+      AuthSession _session = await Amplify.Auth.fetchAuthSession(
+          options: CognitoSessionOptions(getAWSCredentials: true));
+      if (_session.isSignedIn == false) {
+        return '';
+      }
+
+      CognitoAuthSession _authSession = (_session as CognitoAuthSession);
+      AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
+
+      if (_userToken == null) {
+        return '';
+      }
+      return _userToken.idToken;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  static Future<DIOResponseBody> amplifyUserLogin(LoginAPIBody details) async {
     try {
       CognitoSignInResult _loginResult = await Amplify.Auth.signIn(
               username: details.username!,
@@ -46,7 +78,7 @@ class AmplifyAuth {
     }
   }
 
-  Future<DIOResponseBody> accessTokenLogin(String accessToken) async {
+  static Future<DIOResponseBody> accessTokenLogin(String accessToken) async {
     CognitoAuthSession _session = await Amplify.Auth.fetchAuthSession(
             options: CognitoSessionOptions(getAWSCredentials: true))
         as CognitoAuthSession;
@@ -57,7 +89,7 @@ class AmplifyAuth {
     }
   }
 
-  Future<DIOResponseBody> amplifyRegisterUser(userDetails) async {
+  static Future<DIOResponseBody> amplifyRegisterUser(userDetails) async {
     try {
       Map<CognitoUserAttributeKey, String> userAttributes = {
         CognitoUserAttributeKey.email: userDetails["emailId"],
@@ -83,7 +115,7 @@ class AmplifyAuth {
     }
   }
 
-  Future<DIOResponseBody> amplifyConfirmSignUp(
+  static Future<DIOResponseBody> amplifyConfirmSignUp(
       String username, String otp) async {
     try {
       SignUpResult result = await Amplify.Auth.confirmSignUp(
@@ -101,7 +133,7 @@ class AmplifyAuth {
     }
   }
 
-  Future<void> logout() async {
+  static Future<void> logout() async {
     await Amplify.Auth.signOut();
     return;
   }

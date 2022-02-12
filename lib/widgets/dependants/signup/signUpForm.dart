@@ -51,7 +51,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _amplifyRegister(BuildContext context) async {
     try {
-      DIOResponseBody response = await AmplifyAuth().amplifyRegisterUser({
+      DIOResponseBody response = await AmplifyAuth.amplifyRegisterUser({
         "emailId": signUpValues.email.toString(),
         "password": signUpValues.password,
         "firstName": signUpValues.firstname!.split(' ')[0].toString(),
