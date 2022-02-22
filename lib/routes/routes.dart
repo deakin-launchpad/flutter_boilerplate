@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:user_onboarding/widgets/common/common.dart';
 
+import '../constants/constants.dart';
+import '../helpers/helpers.dart';
+import '../widgets/widgets.dart';
 import '../screens/screens.dart';
-export './loginRouter.dart';
 
 class Routes {
   static final FluroRouter _router = FluroRouter();
@@ -22,7 +23,7 @@ class Routes {
   Future<String> get accessToken async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('accessToken')) return '';
-    var token = prefs.getString('accessToken');
+    String? token = prefs.getString('accessToken');
     return token ?? '';
   }
 
@@ -30,12 +31,14 @@ class Routes {
     return Handler(
       handlerFunc: (context, params) {
         return FutureBuilder(
-          future: accessToken,
+          future:
+              Constants.amplifyEnabled ? AmplifyAuth.accessToken : accessToken,
           builder: (context, tokenSnapshot) {
             if (tokenSnapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen('');
             }
             if (tokenSnapshot.data == '') return screen;
+            logger.i(tokenSnapshot.data);
             return Home();
           },
         );
@@ -47,7 +50,8 @@ class Routes {
     return Handler(
       handlerFunc: (context, params) {
         return FutureBuilder(
-          future: accessToken,
+          future:
+              Constants.amplifyEnabled ? AmplifyAuth.accessToken : accessToken,
           builder: (context, tokenSnapshot) {
             if (tokenSnapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen('');
@@ -58,6 +62,15 @@ class Routes {
         );
       },
     );
+  }
+
+  Handler confirmAccountRoute() {
+    return Handler(handlerFunc: (context, params) {
+      return ConfirmAccount(
+        email: params['email']![0],
+        password: params['password']![0],
+      );
+    });
   }
 
   void _defineRoute(String route, Handler handler,
@@ -77,6 +90,10 @@ class Routes {
     _defineRoute(
       SignUp.route,
       unAuthenticatedRoute(SignUp()),
+    );
+    _defineRoute(
+      ConfirmAccount.route,
+      confirmAccountRoute(),
     );
     _defineRoute(
       Home.route,

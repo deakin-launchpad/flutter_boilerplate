@@ -1,8 +1,8 @@
-# Flutter 2 Boilerplate (version 1.3.0)
+# Flutter 2 Boilerplate (version 1.3.1)
 
 A boilerplate project created in flutter. Boilerplate supports both web and mobile. VSCode is recommended in this project.
 
-Current Flutter Version : 2.5.3 
+Current Flutter Version : 2.8.0
 
 ## Getting Started
 
@@ -23,13 +23,15 @@ Download or clone this repo by using the link below:
 ```
 https://github.com/deakin-launchpad/flutter2_boilerplate.git
 ```
+
 **Step 2:**
 
-Go to project root and execute the following command in console to get the required dependencies: 
+Go to project root and execute the following command in console to get the required dependencies:
 
 ```
-flutter pub get 
+flutter pub get
 ```
+
 ## Running the project
 
 ```
