@@ -51,7 +51,7 @@ class UserDataProvider with ChangeNotifier {
   UserProfileAPIBody? get userProfile => _userProfile;
 
   /// update current accessToken and store in SharePrefs with [token]
-  void assignAccessToken(String token) async {
+  Future<void> assignAccessToken(String token) async {
     if (token != "") {
       _accessToken = token;
       _userLoggedIn = true;
@@ -81,11 +81,12 @@ class UserDataProvider with ChangeNotifier {
         Navigator.popUntil(context, (route) => route.isFirst);
       }
     } else {
+      var _accessToken = await SharedPrefHelper.accessToken;
       bool response = await API().logout(_accessToken!);
       if (response || accessToken == null) {
         _userLoggedIn = false;
-        notifyListeners();
         _accessToken = null;
+        notifyListeners();
         final prefs = await SharedPreferences.getInstance();
         prefs.clear();
         Navigator.pushNamedAndRemoveUntil(
