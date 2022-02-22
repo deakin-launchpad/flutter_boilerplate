@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_onboarding/constants/constants.dart';
 
 import '../../helpers/helpers.dart';
 import '../../providers/providers.dart';
@@ -28,7 +29,9 @@ class Home extends StatelessWidget {
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: FutureBuilder(
-            future: SharedPrefHelper.accessToken,
+            future: Constants.amplifyEnabled
+                ? AmplifyAuth.accessToken
+                : SharedPrefHelper.accessToken,
             builder: (_, AsyncSnapshot<String?> accessToken) => Center(
               child: Column(
                 children: <Widget>[

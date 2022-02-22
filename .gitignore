@@ -58,5 +58,5 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 
-#amplify
-amplify/*
+#amplify 
+amplify/

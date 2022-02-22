@@ -266,8 +266,8 @@ class _LoginFormState extends State<LoginForm> {
 
   void _regularLogin(DIOResponseBody response, Function assignToken) async {
     if (response.success) {
-      assignToken(response.data['accessToken']);
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      await assignToken(response.data['accessToken']);
+      Navigator.of(context).pushReplacementNamed('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
