@@ -4,7 +4,10 @@ class SignupTextField extends StatelessWidget {
   final String? label, hint;
   final TextInputType? type;
   final TextInputAction? action;
-  final Function? validator, onSaved, onSubmit;
+  final void Function(String)? onSubmit;
+  final void Function(String?)? onSaved;
+  final String? Function(String?)? validator;
+  final TextEditingController? controller;
   final FocusNode? focusNode;
   final bool? isPassword;
   const SignupTextField({
@@ -16,6 +19,7 @@ class SignupTextField extends StatelessWidget {
     this.type,
     this.validator,
     this.focusNode,
+    this.controller,
     this.isPassword,
   });
   @override
@@ -23,11 +27,12 @@ class SignupTextField extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
-        onChanged: onSaved as void Function(String?)?,
+        onChanged: onSaved,
         keyboardType: type,
         focusNode: focusNode,
-        onFieldSubmitted: onSubmit as void Function(String)?,
-        validator: validator as String? Function(String?)?,
+        controller: controller,
+        onFieldSubmitted: onSubmit,
+        validator: validator,
         obscureText: isPassword == null ? false : isPassword!,
         textInputAction: action,
         decoration: InputDecoration(

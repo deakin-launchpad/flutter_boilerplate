@@ -48,7 +48,7 @@ class SignUp extends StatelessWidget {
     return Theme(
       data: ThemeData.light(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: SizedBox(
           height: height,
           width: MediaQuery.of(context).size.width,
@@ -63,6 +63,9 @@ class SignUp extends StatelessWidget {
                 ),
               Positioned(
                 top: 155,
+                left: 0.0,
+                right: 0.0,
+                bottom: 0.0,
                 child: Container(
                   width: getFormWidth(context),
                   padding: const EdgeInsets.symmetric(horizontal: 20),
