@@ -11,7 +11,7 @@ class SQLiteHelper {
   static final SQLiteHelper _singleton = SQLiteHelper._privateConstructor();
 
   static final String _databaseName =
-      Constants.applicationConstants.title + ".db";
+      "${Constants.applicationConstants.title}.db";
   static const int _databaseVersion = 1;
   static Database? _database;
 

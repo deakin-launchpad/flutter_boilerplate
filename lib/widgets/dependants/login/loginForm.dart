@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
 
 import '../../../constants/constants.dart';
 import '../../../helpers/helpers.dart';
@@ -181,7 +179,7 @@ class _LoginFormState extends State<LoginForm> {
       text: TextSpan(
           text: 'flutter',
           style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline1,
+            textStyle: Theme.of(context).textTheme.displayLarge,
             fontSize: 30,
             fontWeight: FontWeight.w700,
             color: Colors.black,

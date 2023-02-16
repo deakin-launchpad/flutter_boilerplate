@@ -86,7 +86,7 @@ class _WelcomePageState extends State<WelcomePage> {
       text: TextSpan(
           text: 'flutter',
           style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline1,
+            textStyle: Theme.of(context).textTheme.displayLarge,
             fontSize: 30,
             fontWeight: FontWeight.w700,
             color: Colors.white,
@@ -105,7 +105,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   Widget _authorText() {
-    double _fontSize = _layoutHelper.isTablet(context) ? 15 : 20;
+    double fontSize = _layoutHelper.isTablet(context) ? 15 : 20;
     return Align(
       alignment: Alignment.bottomCenter,
       child: RichText(
@@ -113,8 +113,8 @@ class _WelcomePageState extends State<WelcomePage> {
         text: TextSpan(
           text: 'Developed',
           style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline1,
-            fontSize: _fontSize,
+            textStyle: Theme.of(context).textTheme.displayLarge,
+            fontSize: fontSize,
             fontWeight: FontWeight.w700,
             color: Colors.white70,
           ),
@@ -123,14 +123,14 @@ class _WelcomePageState extends State<WelcomePage> {
               text: ' By ',
               style: TextStyle(
                 color: Colors.white70,
-                fontSize: _fontSize,
+                fontSize: fontSize,
               ),
             ),
             TextSpan(
               text: Constants.applicationConstants.author,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: _fontSize,
+                fontSize: fontSize,
               ),
             ),
           ],

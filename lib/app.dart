@@ -21,12 +21,12 @@ class _ApplicationState extends State<Application> {
   bool _amplifyConfigured = false;
 
   Future<void> _configureAmplify() async {
-    Constants _constants = Constants();
-    if (_constants.amplifyConfiguration == null) return;
+    Constants constants = Constants();
+    if (constants.amplifyConfiguration == null) return;
 
     try {
       await Amplify.addPlugin(AmplifyAuthCognito());
-      await Amplify.configure(_constants.amplifyConfiguration!);
+      await Amplify.configure(constants.amplifyConfiguration!);
     } catch (error) {
       logger.wtf(error.toString());
     } finally {

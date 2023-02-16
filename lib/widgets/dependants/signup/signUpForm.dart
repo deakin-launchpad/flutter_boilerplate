@@ -87,7 +87,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void _regularRegister(BuildContext context) async {
-    DeviceInfo _plugin = DeviceInfo();
+    DeviceInfo plugin = DeviceInfo();
 
     DIOResponseBody response = await API().registerUser({
       "firstName": signUpValues.firstname!.split(' ')[0].toString(),
@@ -98,7 +98,7 @@ class _SignUpFormState extends State<SignUpForm> {
       "phoneNumber": signUpValues.number.toString(),
       "countryCode": "+61",
       "password": signUpValues.password,
-      "deviceData": await _plugin.info
+      "deviceData": await plugin.info
     });
     if (response.success) {
       ScaffoldMessenger.of(context).showSnackBar(

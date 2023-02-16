@@ -216,6 +216,21 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                 Container(
                   margin: const EdgeInsets.symmetric(
                       vertical: 16.0, horizontal: 30),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.grey.shade200,
+                          offset: const Offset(2, 4),
+                          blurRadius: 5,
+                          spreadRadius: 2)
+                    ],
+                    gradient: const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xfffbb448), Color(0xfff7892b)],
+                    ),
+                  ),
                   child: ButtonTheme(
                     height: 50,
                     child: TextButton(
@@ -271,21 +286,6 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                                     fontWeight: FontWeight.bold),
                               ),
                       ),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.grey.shade200,
-                          offset: const Offset(2, 4),
-                          blurRadius: 5,
-                          spreadRadius: 2)
-                    ],
-                    gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [Color(0xfffbb448), Color(0xfff7892b)],
                     ),
                   ),
                 ),

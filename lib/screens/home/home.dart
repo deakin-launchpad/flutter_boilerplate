@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
                       accessToken.data != null
                           ? 'accessToken: ${accessToken.data}'
                           : 'Empty',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   )
                 ],
