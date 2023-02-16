@@ -6,17 +6,17 @@ class ApplicationTheme {
   bool useDarkMode = false;
 
   ApplicationTheme(BuildContext context) {
-    final TextTheme _textTheme = Theme.of(context).textTheme;
-    final TextTheme _googleTextTheme =
-        GoogleFonts.openSansTextTheme(_textTheme).copyWith(
-      bodyText1: GoogleFonts.montserrat(textStyle: _textTheme.bodyText1),
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final TextTheme googleTextTheme =
+        GoogleFonts.openSansTextTheme(textTheme).copyWith(
+      bodyLarge: GoogleFonts.montserrat(textStyle: textTheme.bodyLarge),
     );
 
-    final ThemeData _baseTheme =
+    final ThemeData baseTheme =
         useDarkMode ? ThemeData.dark() : ThemeData.light();
 
-    _theme = _baseTheme.copyWith(
-      colorScheme: _baseTheme.colorScheme.copyWith(
+    _theme = baseTheme.copyWith(
+      colorScheme: baseTheme.colorScheme.copyWith(
         primary: Colors.white,
         secondary: Colors.blueAccent,
       ),
@@ -30,11 +30,11 @@ class ApplicationTheme {
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        titleTextStyle: _googleTextTheme.headline6,
-        toolbarTextStyle: _googleTextTheme.headline5,
+        titleTextStyle: googleTextTheme.titleLarge,
+        toolbarTextStyle: googleTextTheme.headlineSmall,
       ),
       primaryTextTheme: TextTheme(
-        headline6: ThemeData.light().primaryTextTheme.headline6!.copyWith(
+        titleLarge: ThemeData.light().primaryTextTheme.titleLarge!.copyWith(
               color: Colors.black,
             ),
       ),

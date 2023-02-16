@@ -6,8 +6,8 @@ class LoginAPIBody {
   LoginAPIBody({this.username, this.password});
 
   Future<Map<String, dynamic>> get toLoginApiJSON async {
-    DeviceInfo _plugin = DeviceInfo();
-    Map<String, String> deviceData = await _plugin.info;
+    DeviceInfo plugin = DeviceInfo();
+    Map<String, String> deviceData = await plugin.info;
     return {
       "emailId": username,
       "password": password,

@@ -29,8 +29,7 @@ class API {
   Future<DIOResponseBody> accessTokenLogin(String accessToken) async {
     return _dioInstance.instance
         .post('user/accessTokenLogin',
-            options:
-                Options(headers: {'authorization': 'Bearer ' + accessToken}))
+            options: Options(headers: {'authorization': 'Bearer $accessToken'}))
         .then((response) {
       return DIOResponseBody(success: true, data: response.data['data']);
     }).catchError((error) {
@@ -49,7 +48,7 @@ class API {
     return _dioInstance.instance
         .put(
           'user/logout',
-          options: Options(headers: {'authorization': 'Bearer ' + token}),
+          options: Options(headers: {'authorization': 'Bearer $token'}),
         )
         .then((value) => true)
         .catchError((err) => false);
@@ -62,7 +61,7 @@ class API {
           data: data.toJSON(),
           options: Options(
             headers: {
-              'authorization': 'Bearer ' + await _dioInstance.accessToken
+              'authorization': 'Bearer ${await _dioInstance.accessToken}'
             },
           ),
         )
@@ -79,7 +78,7 @@ class API {
           'user/getProfile',
           options: Options(
             headers: {
-              'authorization': 'Bearer ' + await _dioInstance.accessToken
+              'authorization': 'Bearer ${await _dioInstance.accessToken}'
             },
           ),
         )

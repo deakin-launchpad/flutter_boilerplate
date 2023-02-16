@@ -10,8 +10,8 @@ class DevEnvironmentListTile extends StatelessWidget {
     return ListTile(
       title: Text(title),
       trailing: TextButton(
-        child: const Text('Test'),
         onPressed: onPressed,
+        child: const Text('Test'),
       ),
     );
   }

@@ -10,7 +10,7 @@ class ChangePasswordForm extends StatefulWidget {
 }
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
-  final GlobalKey<FormState>? _formKey = GlobalKey();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   String _currentPassword = '', _newPassword = '';
 
   Widget _textField(
@@ -180,9 +180,9 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           ), //confirm password
           const SizedBox(height: 20),
           _changeButton(() {
-            if (_formKey!.currentState != null) {
-              if (_formKey!.currentState!.validate()) {
-                _formKey!.currentState!.save();
+            if (_formKey.currentState != null) {
+              if (_formKey.currentState!.validate()) {
+                _formKey.currentState!.save();
                 changePassword(false);
               }
             }

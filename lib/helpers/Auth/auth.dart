@@ -19,10 +19,10 @@ class AmplifyAuth {
 
   static Future<bool> get loginStatus async {
     try {
-      AuthSession _session = await Amplify.Auth.fetchAuthSession(
+      AuthSession session = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
-      logger.i("Auth isLoggedIn: ${_session.isSignedIn}");
-      return _session.isSignedIn;
+      logger.i("Auth isLoggedIn: ${session.isSignedIn}");
+      return session.isSignedIn;
     } catch (e) {
       logger.e(e);
       return false;
@@ -31,19 +31,19 @@ class AmplifyAuth {
 
   static Future<String?> get accessToken async {
     try {
-      AuthSession _session = await Amplify.Auth.fetchAuthSession(
+      AuthSession session = await Amplify.Auth.fetchAuthSession(
           options: CognitoSessionOptions(getAWSCredentials: true));
-      if (_session.isSignedIn == false) {
+      if (session.isSignedIn == false) {
         return '';
       }
 
-      CognitoAuthSession _authSession = (_session as CognitoAuthSession);
-      AWSCognitoUserPoolTokens? _userToken = _authSession.userPoolTokens;
+      CognitoAuthSession authSession = (session as CognitoAuthSession);
+      AWSCognitoUserPoolTokens? userToken = authSession.userPoolTokens;
 
-      if (_userToken == null) {
+      if (userToken == null) {
         return '';
       }
-      return _userToken.idToken;
+      return userToken.idToken;
     } catch (e) {
       return '';
     }
@@ -51,7 +51,7 @@ class AmplifyAuth {
 
   static Future<DIOResponseBody> amplifyUserLogin(LoginAPIBody details) async {
     try {
-      CognitoSignInResult _loginResult = await Amplify.Auth.signIn(
+      CognitoSignInResult loginResult = await Amplify.Auth.signIn(
               username: details.username!,
               password: details.password!,
               options: CognitoSignInOptions(clientMetadata: {}))
@@ -62,8 +62,8 @@ class AmplifyAuth {
       // logger.i("Additional Info", _loginResult.nextStep!.additionalInfo);
       // logger.i("Code Deli Details", _loginResult.nextStep!.codeDeliveryDetails);
 
-      if (_loginResult.isSignedIn) {
-        return DIOResponseBody(success: true, data: _loginResult.isSignedIn);
+      if (loginResult.isSignedIn) {
+        return DIOResponseBody(success: true, data: loginResult.isSignedIn);
       } else {
         return DIOResponseBody(success: false, data: "Login Failed");
       }
@@ -79,10 +79,10 @@ class AmplifyAuth {
   }
 
   static Future<DIOResponseBody> accessTokenLogin(String accessToken) async {
-    CognitoAuthSession _session = await Amplify.Auth.fetchAuthSession(
+    CognitoAuthSession session = await Amplify.Auth.fetchAuthSession(
             options: CognitoSessionOptions(getAWSCredentials: true))
         as CognitoAuthSession;
-    if (_session.isSignedIn) {
+    if (session.isSignedIn) {
       return DIOResponseBody(success: true);
     } else {
       return DIOResponseBody(success: false);
@@ -98,13 +98,13 @@ class AmplifyAuth {
         CognitoUserAttributeKey.phoneNumber:
             userDetails["countryCode"] + userDetails["phoneNumber"],
       };
-      CognitoSignUpResult _signupResult = await Amplify.Auth.signUp(
+      CognitoSignUpResult signupResult = await Amplify.Auth.signUp(
               username: userDetails['emailId']!,
               password: userDetails['password']!,
               options: CognitoSignUpOptions(userAttributes: userAttributes))
           as CognitoSignUpResult;
 
-      if (_signupResult.isSignUpComplete) {
+      if (signupResult.isSignUpComplete) {
         return DIOResponseBody(success: true);
       } else {
         return DIOResponseBody(success: false, data: "SignUp Failed");
