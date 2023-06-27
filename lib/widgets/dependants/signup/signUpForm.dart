@@ -8,7 +8,7 @@ import 'signUpTextfField.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
@@ -61,20 +61,24 @@ class _SignUpFormState extends State<SignUpForm> {
       });
 
       if (response.success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'Registered successfully. Please confirm to be signed in.'),
-          ),
-        );
-        Navigator.pushNamed(
-            context, '/confirm/${signUpValues.email}/${signUpValues.password}');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  'Registered successfully. Please confirm to be signed in.'),
+            ),
+          );
+          Navigator.pushNamed(context,
+              '/confirm/${signUpValues.email}/${signUpValues.password}');
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(response.data),
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(response.data),
+            ),
+          );
+        }
       }
     } on UsernameExistsException catch (err) {
       logger.e(err.message);
@@ -101,18 +105,22 @@ class _SignUpFormState extends State<SignUpForm> {
       "deviceData": await plugin.info
     });
     if (response.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('User Registered'),
-        ),
-      );
-      return Navigator.of(context).pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User Registered'),
+          ),
+        );
+        return Navigator.of(context).pop();
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response.data),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(response.data),
+          ),
+        );
+      }
     }
   }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -78,7 +80,9 @@ class UserDataProvider with ChangeNotifier {
       _accessToken = null;
       final prefs = await SharedPreferences.getInstance();
       if (await prefs.clear()) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        if (context.mounted) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
       }
     } else {
       var _accessToken = await SharedPrefHelper.accessToken;
@@ -89,8 +93,10 @@ class UserDataProvider with ChangeNotifier {
         notifyListeners();
         final prefs = await SharedPreferences.getInstance();
         prefs.clear();
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/welcome', (route) => route.isFirst);
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/welcome', (route) => route.isFirst);
+        }
       }
     }
   }

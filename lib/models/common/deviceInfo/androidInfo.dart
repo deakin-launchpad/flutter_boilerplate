@@ -5,10 +5,10 @@ class AndroidInfo {
   String uuid;
   AndroidInfo({required this.uuid});
   Future<Map<String, String>> get info async {
-    AndroidDeviceInfo _androidInfo = await _plugin.androidInfo;
+    AndroidDeviceInfo androidInfo = await _plugin.androidInfo;
     return {
       'deviceName':
-          '${_androidInfo.manufacturer} ${_androidInfo.model} on Android ${_androidInfo.version.release}',
+          '${androidInfo.manufacturer} ${androidInfo.model} on Android ${androidInfo.version.release}',
       'deviceUUID': uuid,
       'deviceType': 'ANDROID'
     };

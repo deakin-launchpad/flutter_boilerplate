@@ -6,7 +6,7 @@ import '../../../models/models.dart';
 
 class ChangePasswordForm extends StatefulWidget {
   @override
-  _ChangePasswordFormState createState() => _ChangePasswordFormState();
+  State<ChangePasswordForm> createState() => _ChangePasswordFormState();
 }
 
 class _ChangePasswordFormState extends State<ChangePasswordForm> {
@@ -65,11 +65,15 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     );
     DIOResponseBody response = await API().changePassword(apiBody);
     if (response.success) {
-      Provider.of<UserDataProvider>(context, listen: false).getUserProfile();
-      Navigator.pushReplacementNamed(context, '/home');
+      if (mounted) {
+        Provider.of<UserDataProvider>(context, listen: false).getUserProfile();
+        Navigator.pushReplacementNamed(context, '/home');
+      }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(response.data)));
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(response.data)));
+      }
     }
   }
 

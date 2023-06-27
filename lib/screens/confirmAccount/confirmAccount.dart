@@ -19,7 +19,7 @@ class ConfirmAccount extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ConfirmAccountState createState() => _ConfirmAccountState();
+  State<ConfirmAccount> createState() => _ConfirmAccountState();
 }
 
 class _ConfirmAccountState extends State<ConfirmAccount> {
@@ -256,7 +256,10 @@ class _ConfirmAccountState extends State<ConfirmAccount> {
                             setState(() {
                               _loading = false;
                             });
-                            Navigator.of(context).pushReplacementNamed('/home');
+                            if (mounted) {
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/home');
+                            }
                           }
 
                           setState(() {

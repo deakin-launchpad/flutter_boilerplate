@@ -9,24 +9,24 @@ import 'iosInfo.dart';
 
 class DeviceInfo {
   Future<String> generateUUID() async {
-    String? _deviceUUID;
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String? deviceUUID;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     void updateWebUUID() {
-      _deviceUUID = const Uuid().v4();
-      if (_deviceUUID != null) _prefs.setString('uuid', _deviceUUID!);
+      deviceUUID = const Uuid().v4();
+      if (deviceUUID != null) prefs.setString('uuid', deviceUUID!);
     }
 
-    if (_prefs.containsKey('uuid')) {
-      String _temp = _prefs.getString('uuid')!;
-      if (_temp.isEmpty) {
+    if (prefs.containsKey('uuid')) {
+      String temp = prefs.getString('uuid')!;
+      if (temp.isEmpty) {
         updateWebUUID();
       } else {
-        _deviceUUID = _temp;
+        deviceUUID = temp;
       }
     } else {
       updateWebUUID();
     }
-    return _deviceUUID!;
+    return deviceUUID!;
   }
 
   Future<Map<String, String>> get info async {

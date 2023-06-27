@@ -13,7 +13,7 @@ description: basic user onboarding for flutter
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 0.0.1+1
 environment:
-  sdk: '>=2.18.4'
+  sdk: ">=2.18.4"
   flutter: 3.7.3
 
 dependencies:

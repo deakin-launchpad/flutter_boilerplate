@@ -21,7 +21,7 @@ class SignUp extends StatelessWidget {
       return MediaQuery.of(context).size.width;
     }
 
-    Widget _backButton() {
+    Widget backButton() {
       return InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -74,7 +74,7 @@ class SignUp extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(top: 60, left: 10, child: _backButton()),
+              Positioned(top: 60, left: 10, child: backButton()),
             ],
           ),
         ),

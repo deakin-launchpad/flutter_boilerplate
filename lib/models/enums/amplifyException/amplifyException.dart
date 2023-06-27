@@ -1,3 +1,4 @@
+// ignore: camel_case_types
 enum AMPLIFY_EXCEPTION { UserNotConfirmedException, NotAuthorizedException }
 
 extension AmplifyExceptions on AMPLIFY_EXCEPTION {

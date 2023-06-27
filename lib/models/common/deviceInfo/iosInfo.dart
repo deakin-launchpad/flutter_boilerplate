@@ -5,9 +5,9 @@ class IosInfo {
   String uuid;
   IosInfo({required this.uuid});
   Future<Map<String, String>> get info async {
-    IosDeviceInfo _info = await _plugin.iosInfo;
+    IosDeviceInfo info = await _plugin.iosInfo;
     return {
-      'deviceName': '${_info.name} on ${_info.systemVersion}',
+      'deviceName': '${info.name} on ${info.systemVersion}',
       'deviceUUID': uuid,
       'deviceType': 'IOS'
     };

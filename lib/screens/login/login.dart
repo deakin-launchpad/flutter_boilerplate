@@ -21,7 +21,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
-    Widget _backButton() {
+    Widget backButton() {
       return InkWell(
         onTap: () {
           Navigator.pop(context);
@@ -66,7 +66,7 @@ class Login extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(top: 60, left: 10, child: _backButton()),
+            Positioned(top: 60, left: 10, child: backButton()),
           ],
         ),
       ),

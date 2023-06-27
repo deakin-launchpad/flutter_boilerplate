@@ -14,7 +14,7 @@ class LoginForm extends StatefulWidget {
     required this.height,
   });
   @override
-  _LoginFormState createState() => _LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
@@ -265,7 +265,9 @@ class _LoginFormState extends State<LoginForm> {
   void _regularLogin(DIOResponseBody response, Function assignToken) async {
     if (response.success) {
       await assignToken(response.data['accessToken']);
-      Navigator.of(context).pushReplacementNamed('/home');
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
